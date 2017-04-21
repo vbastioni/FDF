@@ -1,4 +1,4 @@
-NAME=42gl
+NAME=fdf
 LIB=gl.a
 CC=gcc
 CFLAGS=-Wall -Wextra -Werror
@@ -9,14 +9,13 @@ OBJ=$(SRC:.c=.o)
 SRC_D=./srcs/
 INC_D=./includes/
 
-all: $(NAME)
-
 $(NAME):
-	make -C libft/
-	$(CC) $(CFLAGS) -c $(M) $(addprefix $(SRC_D), $(SRC)) -I $(INC_D) -L libtf/ -lft
-	ar rc $(LIB) $(OBJ)
-	ranlib $(LIB)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBS) -o $(NAME) 
+	make -C ./libft/
+	make -C ./gnl/
+	$(CC) $(SRC) $(CFLAGS) $(LIBS) ./gnl/get_next_line.o -o $(NAME) -Llibft/ -Ilibft -lft
+
+
+all: $(NAME)
 
 clean:
 	@echo "Cleaning."

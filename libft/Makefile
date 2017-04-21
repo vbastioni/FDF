@@ -6,7 +6,7 @@
 #    By: vbastion <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/12 19:31:49 by vbastion          #+#    #+#              #
-#    Updated: 2017/04/20 15:01:40 by vbastion         ###   ########.fr        #
+#    Updated: 2017/04/21 14:21:48 by vbastion         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,11 +24,9 @@ SRC=ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c ft_memmove.c ft_memchr.c \
 	ft_strsub.c ft_strjoin.c ft_strtrim.c ft_strsplit.c ft_itoa.c ft_putchar.c \
 	ft_putstr.c ft_putendl.c ft_putnbr.c ft_putchar_fd.c ft_putstr_fd.c \
 	ft_putendl_fd.c ft_putnbr_fd.c ft_lstnew.c ft_lstdelone.c ft_lstdel.c \
-	ft_lstadd.c ft_lstiter.c ft_lstmap.c\
-	ft_pow.c ft_torad.c ft_todeg.c\
-	ft_lstmerge.c ft_lstsize.c ft_lstat.c ft_lstfind.c\
-	ft_valid_base.c ft_usage.c ft_abs.c ft_itoabase.c ft_atol.c ft_countbits.c \
-	ft_activebits.c get_next_line.c
+	ft_lstadd.c ft_lstiter.c ft_lstmap.c ft_pow.c ft_torad.c ft_todeg.c\
+	ft_lstmerge.c ft_lstsize.c ft_lstat.c ft_lstfind.c ft_valid_base.c\
+	ft_usage.c ft_abs.c ft_itoabase.c ft_atol.c ft_countbits.c  ft_activebits.c
 OBJ=$(SRC:.c=.o)
 
 $(NAME): $(SRC)
