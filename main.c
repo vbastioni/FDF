@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/20 13:55:36 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/21 15:04:00 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/04/21 16:08:05 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,25 @@ int		exit_func(int keycode,void *param)
 	return (0);
 }
 
+void	work(char *line)
+{
+	char	**splitted;
+	int		i;
+
+	i = 0;
+	splitted = ft_strsplit(line, ' ');
+	while (*(splitted + i))
+	{
+		ft_putstr(*(splitted + i));
+		ft_putstr(" | ");
+		i++;
+	}
+	ft_putstr("\n");
+	ft_putstr("# of items: ");
+	ft_putnbr(i);
+	ft_putstr(".\n");
+}
+
 int		read_file(char *filename)
 {
 	int		fd;
@@ -48,7 +67,7 @@ int		read_file(char *filename)
 	if ((fd = open(filename, O_RDONLY)) < 0)
 		return (err("this file does not exist"));
 	while ((gnl_ret = get_next_line(fd, &line)) > 0)
-		ft_putendl(line);
+		work(line);
 	if (gnl_ret == -1)
 		return (err("Error in file reading..."));
 	return (1);
