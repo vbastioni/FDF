@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_valid_base(char *base, int *blen)
+int	ft_valid_base(const char *base, int *blen)
 {
 	int	i;
 

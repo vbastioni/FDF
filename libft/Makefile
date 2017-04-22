@@ -26,7 +26,8 @@ SRC=ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c ft_memmove.c ft_memchr.c \
 	ft_putendl_fd.c ft_putnbr_fd.c ft_lstnew.c ft_lstdelone.c ft_lstdel.c \
 	ft_lstadd.c ft_lstiter.c ft_lstmap.c ft_pow.c ft_torad.c ft_todeg.c\
 	ft_lstmerge.c ft_lstsize.c ft_lstat.c ft_lstfind.c ft_valid_base.c\
-	ft_usage.c ft_abs.c ft_itoabase.c ft_atol.c ft_countbits.c  ft_activebits.c
+	ft_usage.c ft_abs.c ft_itoabase.c ft_atol.c ft_countbits.c  ft_activebits.c\
+	ft_isspace.c ft_atoibase.c ft_atoinbase.c
 OBJ=$(SRC:.c=.o)
 
 $(NAME): $(SRC)

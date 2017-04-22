@@ -94,12 +94,15 @@ void				ft_lstmerge(t_list **lhs, t_list *rhs);
 size_t				ft_lstsize(t_list *lst);
 t_list				*ft_lstat(t_list *lst, int index);
 t_list				*ft_lstfind(t_list *lst, const void *content, size_t size);
-int					ft_valid_base(char *base, int *blen);
+int					ft_valid_base(const char *base, int *blen);
 int					ft_usage(char *name, char *us);
 char				*ft_itoabase(int n, char *base);
 unsigned int		ft_abs(int n);
 long				ft_atol(char const *str);
 int					ft_countbits(int n);
 int					ft_activebits(int n);
+int				ft_isspace(char c);
+unsigned int			ft_atoibase(const char *nbr, const char *base);
+unsigned int			ft_atoinbase(const char *nbr);
 
 #endif
