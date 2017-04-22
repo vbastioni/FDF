@@ -8,39 +8,50 @@ MLX=minilibx_macos
 GNL=./gnl
 FT=./libft
 ifeq ("$t", "true")
-LIBS +=-L $(MLX) -l mlx -I minilibx_macos
+LIBS +=-L $(MLX) -l mlx -I $(MLX)
 endif
-# SRC=data.c main.c displays.c parsing.c vertice.c
-SRC=data.c\
+SRC_D=./srcs/
+INC_D=./includes/
+ITEM:=data.c\
     displays.c\
     main.c\
     parsing.c\
     pixel.c\
     utils.c\
     vertice.c
-OBJ=$(SRC:.c=.o)
-
-SRC_D=./srcs/
-INC_D=./includes/
+SRC:=$(addprefix $(SRC_D), $(ITEM))
+OBJ:=$(ITEM:.c=.o)
 
 $(NAME):
-	make -C $(FT)/
-	make -C $(GNL)/
-	$(CC) $(SRC) $(CFLAGS) $(LIBS) $(GNL)/get_next_line.o -o $(NAME) -Llibft/ -Ilibft -lft
-
+	@echo "Compiling for $(NAME)"
+	@make -C $(FT)/
+	@make -C $(GNL)/
+	@echo "Compiling $(NAME)"
+ifeq ("$t", "true")
+	@tar -xf varz/minilibx_macos_20151105.tgz
+	@make -C $(MLX)
+endif
+	@$(CC) $(SRC) $(CFLAGS) $(LIBS) $(GNL)/get_next_line.o -o $(NAME) -Llibft/ -Ilibft -lft -I $(INC_D)
+	@echo "$(NAME) is ready!"
 
 all: $(NAME)
 
 clean:
-	@echo "Cleaning."
-	make -C $(FT)/ clean
-	make -C $(GNL)/ clean
-	rm -f $(OBJ)
+	@echo "Cleaning objects for $(NAME)"
+	@make -C $(FT)/ clean
+	@make -C $(GNL)/ clean
+	@echo "Cleaning objects of $(NAME)"
+	@rm -f $(OBJ)
 
 fclean: clean
-	make -C $(FT)/ fclean
-	make -C $(GNL)/ fclean
-	rm -f $(LIB)
-	rm -f $(NAME)
+	@echo "Cleaning for $(NAME)"
+	@make -C $(FT)/ fclean
+	@make -C $(GNL)/ fclean
+	@echo "Cleaning $(NAME)"
+	@rm -f $(LIB)
+	@rm -f $(NAME)
+ifeq ("$t", "true")
+	@rm -rf $(MLX)
+endif
 
 re: fclean all
