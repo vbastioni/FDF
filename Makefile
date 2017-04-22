@@ -12,7 +12,8 @@ LIBS +=-L $(MLX) -l mlx -I $(MLX)
 endif
 SRC_D=./srcs/
 INC_D=./includes/
-ITEM:=data.c\
+ITEM:=callback.c\
+    data.c\
     displays.c\
     main.c\
     parsing.c\

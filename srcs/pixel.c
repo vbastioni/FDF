@@ -1,5 +1,7 @@
 #include <stdlib.h>
 
+#include "libft.h"
+
 #include "pixel.h"
 
 int	lstadd(t_pixel **lst, t_vert *vert)

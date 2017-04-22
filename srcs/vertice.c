@@ -14,6 +14,8 @@ t_vert	*create_vert(int x, int y, char *data)
 	return (ptr_err("Could not create vertice.")); 
     if (!(splitted = ft_strsplit(data, ',')))
 	return (ptr_err("Could not split data"));
+    if (!splitted[1])
+	ft_putendl("No data for color");
     v->x = x;
     v->y = y;
     v->z = ft_atoi(splitted[0]);

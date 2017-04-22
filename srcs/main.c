@@ -20,26 +20,10 @@
 #include "libft.h"
 #include "pixel.h"
 #include "utils.h"
+#include "callback.h"
 
 int		read_file(char *filename);
-int		exit_func(int keycode, void *param);
 int		main(int ac, char **av);
-
-int		exit_func(int keycode,void *param)
-{
-    int		par;
-    t_data	*data;
-
-    data = (t_data *)param;
-    par = *((int *)(data->data));
-    if (par == keycode)
-    {
-	mlx_destroy_window(data->mlx, data->win);
-	free(data);
-	exit(0);
-    }
-    return (0);
-}
 
 int	work(char *line)
 {
@@ -47,11 +31,12 @@ int	work(char *line)
     t_pixel	*lst;
     int		i;
 
-    i = -1;
     splitted = ft_strsplit(line, ' ');
+    i = -1;
+    lst = 0;
     while (*(splitted + ++i))
 	validate(*(splitted + i), i, &lst);
-    return (0);
+    return (1);
 }
 
 int		read_file(char *filename)
@@ -65,6 +50,7 @@ int		read_file(char *filename)
     while ((gnl_ret = get_next_line(fd, &line)) > 0)
 	if (!(work(line)))
 	    return (0 * err("Error in a line."));
+    
     if (gnl_ret == -1)
 	return (err("Error in file reading..."));
     return (1);
