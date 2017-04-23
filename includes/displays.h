@@ -1,8 +1,8 @@
 #ifndef DISPLAYS_H
 # define DISPLAYS_H
 
-int	display(int mode, char **lines);
+#include "pixel.h"
 
-int	display_parallel(char **lines);
+int	display(t_board	*board, t_data *data);
 
 #endif

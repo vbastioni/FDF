@@ -17,11 +17,8 @@ typedef struct	s_data
 {
 	void		*win;
 	void		*mlx;
-	void		*data;
-	void		*this;
 }				t_data;
 
-t_data			*create_data(void *win, void *mlx, void *data);
-void			destroy_data(t_data *data);
+t_data			*create_data(void *win, void *mlx);
 
 #endif

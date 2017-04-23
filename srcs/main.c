@@ -10,84 +10,32 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <fcntl.h>
 #include <mlx.h>
 
 #include "data.h"
 #include "parsing.h"
-#include "get_next_line.h"
-#include "libft.h"
-#include "pixel.h"
-#include "utils.h"
 #include "callback.h"
-
-int		read_file(char *filename);
-int		main(int ac, char **av);
-
-int	work(char *line)
-{
-    char	**splitted;
-    t_pixel	*lst;
-    int		i;
-
-    splitted = ft_strsplit(line, ' ');
-    i = -1;
-    lst = 0;
-    while (*(splitted + ++i))
-	validate(*(splitted + i), i, &lst);
-    return (1);
-}
-
-int		read_file(char *filename)
-{
-    int		fd;
-    int		gnl_ret;
-    char	*line;
-
-    if ((fd = open(filename, O_RDONLY)) < 0)
-	return (err("this file does not exist"));
-    while ((gnl_ret = get_next_line(fd, &line)) > 0)
-	if (!(work(line)))
-	    return (0 * err("Error in a line."));
-    
-    if (gnl_ret == -1)
-	return (err("Error in file reading..."));
-    return (1);
-}
+#include "displays.h"
+#include "board.h"
+#include "utils.h"
 
 int main(int ac, char **av)
 {
     void	*mlx;
     void	*win;
-    int		x;
-    int		y;
-    int		keycode;
-    t_data	*data;
+    t_board	*board;
+    t_data	*wdata;
 
     if (ac < 2)
 	return (1);
-    if (!read_file(av[1]))
+    if (!(board = read_file(av[1])))
 	return (1);
-    keycode = 53;
-    (void)av;
-    exit(0);
     mlx = mlx_init();
     win = mlx_new_window(mlx, 400, 400, "mlx 42");
-    data = create_data(win, mlx, &keycode);
-    y = 50;
-    while (y < 150)
-    {
-	x = 50;
-	while (x < 150)
-	{
-	    mlx_pixel_put(mlx, win, x, y, 0x00FFFFFF);
-	    x++;
-	}
-	y++;
-    }
-    mlx_key_hook(win, exit_func, data);
+    wdata = create_data(win, mlx);
+    if (!display(board, wdata))
+	return (err("How?"));
+    mlx_key_hook(win, exit_func, create_data(win, mlx));
     mlx_loop(mlx);
-
     return (0);
 }

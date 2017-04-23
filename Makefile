@@ -12,9 +12,14 @@ LIBS +=-L $(MLX) -l mlx -I $(MLX)
 endif
 SRC_D=./srcs/
 INC_D=./includes/
-ITEM:=callback.c\
+ITEM:=\
+    board.c\
+    callback.c\
+    color.c\
     data.c\
+    dims.c\
     displays.c\
+    img_data.c\
     main.c\
     parsing.c\
     pixel.c\

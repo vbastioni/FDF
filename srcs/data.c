@@ -14,7 +14,7 @@
 
 #include "data.h"
 
-t_data	*create_data(void *win, void *mlx, void *data)
+t_data	*create_data(void *win, void *mlx)
 {
 	t_data	*ret;
 
@@ -22,6 +22,5 @@ t_data	*create_data(void *win, void *mlx, void *data)
 		return (NULL);
 	ret->win = win;
 	ret->mlx = mlx;
-	ret->data = data;
 	return (ret);
 }
