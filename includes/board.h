@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 13:06:44 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/24 14:18:27 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/04/24 15:09:21 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,9 @@ typedef struct	s_board
 }				t_board;
 
 t_board			*Board_create();
+
+void			debug_board(t_board *board);
+
+void			board_set_dims(t_board *board);
 
 #endif

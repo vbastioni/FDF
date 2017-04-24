@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 12:54:56 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/24 14:18:28 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/04/24 16:26:28 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,28 +24,16 @@
 #include "dims.h"
 #include "img_data.h"
 
-char	*get_addr(t_pixel *px, t_img_data *data, t_dims padding, int inter)
+char	*get_addr(t_pixel *px, t_img_data *data, const t_board *board)
 {
+	int		inter;
+
+	inter = board->inter.x < board->inter.y ? board->inter.x : board->inter.y;
 	return (data->beg +
-			padding.y * data->sl +
+			board->padding.y * data->sl +
 			px->vert->y * (data->sl * inter) +
-			padding.x * data->bpx +
+			board->padding.x * data->bpx +
 			px->vert->x * (data->bpx * inter));
-}
-
-int	get_color(const t_vert *vert, const t_board *board)
-{
-	int	    neg;
-
-	if (vert->color > -1)
-		return (vert->color);
-	if (vert->color < 0 && vert->z == 0)
-		return (COLOR_DEFAULT);
-	neg = vert->z < 0;
-	return (color_lerp(
-				neg ? COLOR_MIN : COLOR_DEFAULT,
-				neg ? COLOR_DEFAULT : COLOR_MAX,
-				(float)vert->z / (neg ? board->delta.x : board->delta.y)));
 }
 
 void	render(int color, char *addr)
@@ -55,31 +43,64 @@ void	render(int color, char *addr)
 	*(addr + 2) = (color & 0xFF0000) >> 16;
 }
 
-t_dims	set_inter(const t_board *board)
+void	render_to_next(t_pixel *px, t_img_data *data, t_board * board,
+		int inter)
 {
-	t_dims  ret;
+	int			color_curr;
+	int			color_next;
+	int			i;
+	char		*beg;
 
-	ret.x = (400 - board->pdims.x) / (board->pdims.x - 1);
-	ret.y = (400 - board->pdims.y) / (board->pdims.y - 1);
-	return (ret);
+	if (!(px->next && px->next->vert->x != 0))
+		return ;
+	beg = get_addr(px, data, board);
+	color_curr = get_color(px->vert, board);
+	color_next = get_color(px->next->vert, board);
+	i = 1;
+	while (i < inter)
+	{
+		render(color_lerp(color_curr, color_next, (float)i / board->inter.x),
+				get_addr(px, data, board) + i * data->bpx);
+		i++;
+	}
 }
 
-t_dims	set_padding(const t_dims inter, const t_board *board)
+void	render_to_bottom(t_pixel *px, t_img_data *data, t_board *board,
+		int inter)
 {
-	t_dims  ret;
+	int			color_curr;
+	int			color_next;
+	t_pixel		*down;
+	int			i;
+	char		*beg;
 
-	ret.x = (400 - inter.x * (board->pdims.x - 1)) / 2;
-	ret.y = (400 - inter.y * (board->pdims.y - 1 )) /2;
-	return (ret);
+	if (!((px->vert->y + 1) < board->pdims.y))
+		return ;
+	beg = get_addr(px, data, board);
+	color_curr = get_color(px->vert, board);
+	down = px;
+	while (down)
+	{
+		down = down->next;
+		if (down->vert->x == px->vert->x && down->vert->y == (px->vert->y + 1))
+			break;
+	}
+	color_next = get_color(down->vert, board);
+	i = 1;
+	while (i < inter)
+	{
+		render(color_lerp(color_curr, color_next, (float)i / board->inter.x),
+				get_addr(px, data, board) + i * data->sl);
+		i++;
+	}
 }
 
 void	display(t_board	*board, t_data *data)
 {
-	void	*img;
+	void		*img;
 	t_img_data	*idata;
-	t_pixel	*px;
-	t_dims	padding;
-	t_dims	inter;
+	t_pixel		*px;
+	int			inter;
 
 	px = board->pixel;
 	img = mlx_new_image(data->mlx, 400, 400);
@@ -87,12 +108,13 @@ void	display(t_board	*board, t_data *data)
 	idata->beg = 
 		mlx_get_data_addr(img, &idata->bpx, &idata->sl, &idata->endian);
 	idata->bpx /= 8;
-	inter = set_inter(board);
-	padding = set_padding(inter, board);
+	board_set_dims(board);
+	inter = board->inter.x < board->inter.y ? board->inter.x : board->inter.y;
 	while (px)
 	{
-		render(get_color(px->vert, board),
-				get_addr(px, idata, padding, inter.x < inter.y ? inter.x : inter.y));
+		render(get_color(px->vert, board), get_addr(px, idata, board));
+		render_to_next(px, idata, board, inter);
+		render_to_bottom(px, idata, board, inter);
 		px = px->next;
 	}
 	mlx_put_image_to_window (data->mlx, data->win, img, 0, 0);

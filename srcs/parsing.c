@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 14:13:23 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/24 14:18:25 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/04/24 14:51:46 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ t_board	    *read_file(char *filename)
 			return (ptr_err("Error in a line."));
 		board->pdims.y++;
 	}
+	debug_board(board);
 	if (gnl_ret == -1)
 		return (ptr_err("Error in file reading..."));
 	return (board);
