@@ -1,12 +1,13 @@
 #ifndef COLOR_H
 # define COLOR_H
 
-# define MIN_COLOR 0x0000FF
-# define MAX_COLOR 0x00FF00
+# define COLOR_MIN 0x0000FF
+# define COLOR_MAX 0x00FF00
+# define COLOR_DEFAULT 0xFFFFFF
 
 typedef unsigned int	UINT;
 typedef unsigned char	UCHAR;
 
-UINT	color_lerp(UINT color_from, UINT color_to, float pct);
+int	color_lerp(int color_from, int color_to, float pct);
 
 #endif

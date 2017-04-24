@@ -11,5 +11,7 @@ t_board	    *Board_create()
     ret->pixel = NULL;
     ret->height = 0;
     ret->width = 0;
+    ret->max = 0;
+    ret->min = 0;
     return (ret);
 }

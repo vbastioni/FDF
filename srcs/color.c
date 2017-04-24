@@ -1,6 +1,6 @@
 #include "color.h"
 
-UINT	color_lerp(UINT color_from, UINT color_to, float pct)
+int	color_lerp(int color_from, int color_to, float pct)
 {
     if (color_from == color_to)
 	return (color_from);

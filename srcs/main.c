@@ -33,8 +33,7 @@ int main(int ac, char **av)
     mlx = mlx_init();
     win = mlx_new_window(mlx, 400, 400, "mlx 42");
     wdata = create_data(win, mlx);
-    if (!display(board, wdata))
-	return (err("How?"));
+    display(board, wdata);
     mlx_key_hook(win, exit_func, create_data(win, mlx));
     mlx_loop(mlx);
     return (0);
