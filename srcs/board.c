@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 13:13:50 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/24 15:05:19 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/04/24 17:12:07 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	debug_board(t_board *board)
 
 void	board_set_dims(t_board *board)
 {
-	board->inter.x = (400 - board->pdims.x) / (board->pdims.x - 1);
-	board->inter.y = (400 - board->pdims.y) / (board->pdims.y - 1);
-	board->padding.x = (400 - board->inter.x * (board->pdims.x - 1)) / 2;
-	board->padding.y = (400 - board->inter.y * (board->pdims.y - 1 )) /2;
+	board->inter.x = (800 - board->pdims.x) / (board->pdims.x - 1);
+	board->inter.y = (800 - board->pdims.y) / (board->pdims.y - 1);
+	board->padding.x = (800 - board->inter.x * (board->pdims.x - 1)) / 2;
+	board->padding.y = (800 - board->inter.y * (board->pdims.y - 1 )) /2;
 }

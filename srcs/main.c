@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/20 13:55:36 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/24 14:48:56 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/04/24 17:12:09 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ int main(int ac, char **av)
 	if (!(board = read_file(av[1])))
 		return (1);
 	debug_board(board);
+	ft_putstr("Done parsing board...\n");
 	mlx = mlx_init();
-	win = mlx_new_window(mlx, 400, 400, "mlx 42");
+	win = mlx_new_window(mlx, 800, 800, "mlx 42");
 	wdata = create_data(win, mlx);
 	display(board, wdata);
 	mlx_key_hook(win, exit_func, create_data(win, mlx));

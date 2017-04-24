@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 12:54:56 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/24 16:26:28 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/04/24 17:12:08 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	display(t_board	*board, t_data *data)
 	int			inter;
 
 	px = board->pixel;
-	img = mlx_new_image(data->mlx, 400, 400);
+	img = mlx_new_image(data->mlx, 800, 800);
 	idata = ImgData_create();
 	idata->beg = 
 		mlx_get_data_addr(img, &idata->bpx, &idata->sl, &idata->endian);
