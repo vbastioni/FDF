@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dims.h                                             :+:      :+:    :+:   */
+/*   defs.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/24 14:34:32 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/26 09:50:24 by vbastion         ###   ########.fr       */
+/*   Created: 2017/04/26 09:44:15 by vbastion          #+#    #+#             */
+/*   Updated: 2017/04/26 12:42:39 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DIMS_H
-# define DIMS_H
+#ifndef DEFS_H
+# define DEFS_H
 
-typedef struct	s_dims
-{
-    int		x;
-    int		y;
-}		t_dims;
+# define W_H 800
+# define W_N ("FdF")
 
-void	Dims_set(t_dims *dims, int x, int y);
-t_dims	dims_zero();
+# ifndef PI
+# define PI 3.14159265358979323846
+# endif
+
+# ifdef DEBUG
+# define DEBUG_VALUE 1
+# else
+# define DEBUG_VALUE 0
+# endif
 
 #endif

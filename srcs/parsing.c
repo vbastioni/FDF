@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 14:13:23 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/24 17:12:06 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/04/26 10:29:43 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include "parsing.h"
 #include "board.h"
 #include "dims.h"
+
+#include "libft.h"
 
 static int  validate(char *line, t_dims dims, t_board *board)
 {

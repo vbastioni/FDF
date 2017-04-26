@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 14:34:00 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/24 14:34:05 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/04/26 16:14:59 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,6 @@ t_vert	*create_vert(int x, int y, char *data)
 	v->x = x;
 	v->y = y;
 	v->z = ft_atoi(splitted[0]);
-	v->color = splitted[1] ? ft_atoinbase(splitted[1]) : -1;
+	v->color = splitted[1] ? ft_atoibase(splitted[1] + 2, "0123456789abcdef") : -1;
 	return (v);
 }

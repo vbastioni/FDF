@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 12:54:56 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/24 17:12:08 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/04/26 12:29:28 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include "libft.h"
 
+#include "defs.h"
 #include "board.h"
 #include "parsing.h"
 #include "data.h"
@@ -103,7 +104,7 @@ void	display(t_board	*board, t_data *data)
 	int			inter;
 
 	px = board->pixel;
-	img = mlx_new_image(data->mlx, 800, 800);
+	img = mlx_new_image(data->mlx, W_H, W_H);
 	idata = ImgData_create();
 	idata->beg = 
 		mlx_get_data_addr(img, &idata->bpx, &idata->sl, &idata->endian);

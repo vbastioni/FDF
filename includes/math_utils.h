@@ -1,25 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dims.h                                             :+:      :+:    :+:   */
+/*   math_utils.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/24 14:34:32 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/26 09:50:24 by vbastion         ###   ########.fr       */
+/*   Created: 2017/04/26 12:43:08 by vbastion          #+#    #+#             */
+/*   Updated: 2017/04/26 12:45:23 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DIMS_H
-# define DIMS_H
+#ifndef MATH_UTILS_H
+# define MATH_UTILS_H
 
-typedef struct	s_dims
-{
-    int		x;
-    int		y;
-}		t_dims;
+#include "defs.h"
 
-void	Dims_set(t_dims *dims, int x, int y);
-t_dims	dims_zero();
+double	rad2deg(double rad);
+double	deg2rad(double deg);
 
 #endif

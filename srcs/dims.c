@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 14:33:01 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/24 14:33:03 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/04/26 09:54:09 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,4 +18,13 @@ void	Dims_set(t_dims *dims, int x, int y)
 		return ;
 	dims->x = x;
 	dims->y = y;
+}
+
+t_dims	dims_zero()
+{
+	t_dims	dms;
+
+	dms.x = 0;
+	dms.y = 0;
+	return (dms);
 }

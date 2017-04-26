@@ -21,8 +21,10 @@ ITEM:=\
     displays.c\
     img_data.c\
     main.c\
+	math_utils.c\
     parsing.c\
     pixel.c\
+	renderer.c\
     utils.c\
     vertice.c
 SRC:=$(addprefix $(SRC_D), $(ITEM))

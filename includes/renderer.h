@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dims.h                                             :+:      :+:    :+:   */
+/*   renderer.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/24 14:34:32 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/26 09:50:24 by vbastion         ###   ########.fr       */
+/*   Created: 2017/04/26 11:50:22 by vbastion          #+#    #+#             */
+/*   Updated: 2017/04/26 12:21:36 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DIMS_H
-# define DIMS_H
+#ifndef RENDERER_H
+# define RENDERER_H
 
-typedef struct	s_dims
+#include "board.h"
+#include "data.h"
+
+typedef enum	s_display_mode
 {
-    int		x;
-    int		y;
-}		t_dims;
+				PARALLEL,
+				ISOMETRIC
+}				t_display_mode;
 
-void	Dims_set(t_dims *dims, int x, int y);
-t_dims	dims_zero();
+int		render_display(t_board *board, t_data *data, t_display_mode mode);
 
 #endif

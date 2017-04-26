@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 14:32:47 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/24 16:57:16 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/04/26 12:00:49 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,14 @@ int	get_color(const t_vert *vert, const t_board *board)
 	int	    neg;
 
 	if (vert->color > -1)
+	{
+		/*
+		ft_putstr("Alread a color: 0x");
+		ft_putstr(ft_itoabase(vert->color, "0123456789ABCFED"));
+		ft_putstr("\n");
+		*/
 		return (vert->color);
+	}
 	if (vert->color < 0 && vert->z == 0)
 		return (COLOR_DEFAULT);
 	neg = vert->z < 0;

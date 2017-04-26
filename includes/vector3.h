@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dims.h                                             :+:      :+:    :+:   */
+/*   vector3.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/24 14:34:32 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/26 09:50:24 by vbastion         ###   ########.fr       */
+/*   Created: 2017/04/26 13:54:39 by vbastion          #+#    #+#             */
+/*   Updated: 2017/04/26 13:57:17 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DIMS_H
-# define DIMS_H
+#ifndef VECTOR3_H
+# define VECTOR3_H
 
-typedef struct	s_dims
+#include "defs.h"
+
+typedef struct	s_int_vector
 {
-    int		x;
-    int		y;
-}		t_dims;
+	int			x;
+	int			y;
+	int			z;
+}				t_int_vector
 
-void	Dims_set(t_dims *dims, int x, int y);
-t_dims	dims_zero();
+typedef struct	s_vector
+{
+	UCHAR		x;
+	UCHAR		y;
+	UCHAR		z;
+}				t_vector
 
 #endif
