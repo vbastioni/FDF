@@ -40,20 +40,22 @@ int main(int ac, char **av)
 
 	if (ac < 2)
 		return (1);
-	if (preparse_data(av[1], &board))
+	if (!preparse_data(av[1], &board))
 		return (1);
-	exit(0);
-//	parse_and_display(av[1], board);
+	board_set(board);
+	mlx = mlx_init();
+	win = mlx_new_window(mlx, BOARD_MAX_WIDTH, BOARD_MAX_WIDTH, BOARD_NAME);
+	wdata = create_data(win, mlx);
+	parse_and_display(av[1], board, wdata);
+/*
 	if (!(board = read_file(av[1])))
 		return (1);
 	//	exit(0);
-	mlx = mlx_init();
-	win = mlx_new_window(mlx, W_H, W_H, W_N);
-	wdata = create_data(win, mlx);
 	if (ac == 3 && ft_strcmp(av[2], "ISOPLEASE") == 0)
 		render_display(board, wdata, ISOMETRIC);
 	else
 		display(board, wdata);
+*/
 	mlx_key_hook(win, exit_func, create_data(win, mlx));
 	mlx_loop(mlx);
 	return (0);

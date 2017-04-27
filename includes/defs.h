@@ -13,8 +13,11 @@
 #ifndef DEFS_H
 # define DEFS_H
 
-# define W_H 800
-# define W_N ("FdF")
+# define BOARD_MAX_WIDTH 800
+# define W_H BOARD_MAX_WIDTH    // DEPRECATED, TO BE REMOVED!
+# define BOARD_NAME ("FdF")
+# define W_N BOARD_NAME         // DEPRECATED, TO BE REMOVED!
+
 
 # ifndef PI
 # define PI 3.14159265358979323846

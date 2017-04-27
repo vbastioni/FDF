@@ -34,9 +34,9 @@ t_board	    *Board_create()
 
 void	debug_board(t_board *board)
 {
-	ft_putstr("Board data:\n\theight: ");
+	ft_putstr("Board data:\n\twidth: ");
 	ft_putnbr(board->pdims.x);
-	ft_putstr(".\n\twidth: ");
+	ft_putstr(".\n\theight: ");
 	ft_putnbr(board->pdims.y);
 	ft_putstr(".\n\tz min: ");
 	ft_putnbr(board->delta.x);
@@ -45,10 +45,18 @@ void	debug_board(t_board *board)
 	ft_putstr(".\n");
 }
 
+void	board_set(t_board *board)
+{
+    board->inter.x = (BOARD_MAX_WIDTH - board->pdims.x) / (board->pdims.x - 1);
+	board->inter.y = (BOARD_MAX_WIDTH - board->pdims.y) / (board->pdims.y - 1);
+	board->padding.x = (BOARD_MAX_WIDTH - (board->pdims.x + board->inter.x * (board->pdims.x - 1))) / 2;
+	board->padding.y = (BOARD_MAX_WIDTH - (board->pdims.y + board->inter.y * (board->pdims.y - 1))) / 2;
+}
+
 void	board_set_dims(t_board *board)
 {
-	board->inter.x = (W_H - board->pdims.x) / (board->pdims.x - 1);
-	board->inter.y = (W_H - board->pdims.y) / (board->pdims.y - 1);
-	board->padding.x = (W_H - board->inter.x * (board->pdims.x - 1)) / 2;
-	board->padding.y = (W_H - board->inter.y * (board->pdims.y - 1 )) /2;
+	board->inter.x = (BOARD_MAX_WIDTH - board->pdims.x) / (board->pdims.x - 1);
+	board->inter.y = (BOARD_MAX_WIDTH - board->pdims.y) / (board->pdims.y - 1);
+	board->padding.x = (BOARD_MAX_WIDTH - board->inter.x * (board->pdims.x - 1)) / 2;
+	board->padding.y = (BOARD_MAX_WIDTH - board->inter.y * (board->pdims.y - 1 )) /2;
 }

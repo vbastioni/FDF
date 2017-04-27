@@ -14,6 +14,7 @@
 # define BOARD_DATA_H
 
 #include "pixel.h"
+#include "data.h"
 #include "dims.h"
 
 typedef struct	s_board
@@ -30,6 +31,7 @@ t_board			*Board_create();
 
 void			debug_board(t_board *board);
 
+void			board_set(t_board *board);
 void			board_set_dims(t_board *board);
 
 #endif
