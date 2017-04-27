@@ -26,7 +26,8 @@ ITEM:=\
     pixel.c\
 	renderer.c\
     utils.c\
-    vertice.c
+    vertice.c\
+	worker.c
 SRC:=$(addprefix $(SRC_D), $(ITEM))
 OBJ:=$(ITEM:.c=.o)
 
