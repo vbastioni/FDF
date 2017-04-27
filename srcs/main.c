@@ -26,6 +26,36 @@
 
 #include "renderer.h"
 
+#include "get_next_line.h"
+
+#include <fcntl.h>
+
+int	get_initial_data(const char *filename)
+{
+	int		fd;
+	int		gnl;
+	char	*line;
+	char	**splitted;
+	t_dims	bdims;
+
+	if ((fd = open(filename, O_RDONLY)) < 0)
+		return (0);
+	if ((gnl = get_next_line(fd, &line)) < 1)
+		return (0);
+	bdims.x = 0;
+	bdims.y = 1;
+	splitted = ft_strsplit(line, ' ');
+	while (*(splitted + bdims.x))
+		bdims.x++;
+	while ((gnl = get_next_line(fd, &line)) > 0)
+		bdims.y++;
+	ft_putstr("Dims: [");
+	ft_putnbr(bdims.x);
+	ft_putstr(" ,");
+	ft_putnbr(bdims.y);
+	ft_putstr("].\n");
+	return (1);
+}
 int main(int ac, char **av)
 {
 	void	*mlx;
@@ -35,6 +65,8 @@ int main(int ac, char **av)
 
 	if (ac < 2)
 		return (1);
+	get_initial_data(av[1]);
+	exit(0);
 	if (!(board = read_file(av[1])))
 		return (1);
 	//	exit(0);
