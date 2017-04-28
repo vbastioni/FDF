@@ -57,10 +57,82 @@ int 	preparse_data(const char *filename, t_board **board)
 	return (1);
 }
 
-int		parse_and_display(const char *filename, t_board *board, const t_data *wdata)
+typedef struct		s_vertex
 {
+	int x;
+	int y;
+	int z;
+	int color;
+	struct s_vertex	*next;
+}					t_vertex;
+
+int		vertex_add(t_vertex **verts, int altitude, int color, t_dims pos)
+{
+	t_vertex	*vert;
+
+	if (!(vert = (t_vertex *)malloc(sizeof(t_vertex))))
+		return (NULL);
+	vert->z =altitude;
+	vert->color = color;
+	vert->x = pos.x;
+	vert->y = pos.y;
+	vert->next = NULL;
+	if (!verts)
+		return (0);
+	if (!*verts)
+		*verts = vert;
+	else
+		*verts->next = vert;
+	return (1);
+}
+
+int		get_data_from_line(const char **str, t_vertex **verts, t_dims pos)
+{
+	int				i;
+
+	if (!*str || !str || !**str)
+		return (0);
+	i = 0;
+    while (*str[i] != ',' && *str[i] != '\n' &&
+			*str[i] != ' ' && *str[i] != '\0')
+		i++;
+	vertex_add(verts, ft_atoi(*str),
+				(*str[i] == ',') ? ft_atoinbase(*str[i + 1]));
+    while (*str[i] != ',' && *str[i] != '\n' &&
+			*str[i] != ' ' && *str[i] != '\0')
+		i++;
+	*str += i;
+}
+
+int		parse_and_display(const char *filename, t_board *board,
+							const t_data *wdata)
+{
+	void		*img;
+	t_img_data	*idata;
+	int			fd;
+	int			g_r;
+	char		*line;
+	t_vertex	*verts;
+	t_dims		pos;
+
 	if (!open(filename, O_RDONLY))
 		return (0);
+	img = mlx_new_image(wdata->mlx, W_H, W_H);
+	idata = ImgData_create();
+	idata->beg = mlx_get_data_addr(img, &idata->bpx, &idata->sl, &idata->endian);
+	idata->bpx \= 8;
+	fd = open(filename, O_RDONLY);
+	pos.x = 0;
+	pox.y = 0;
+	while ((g_r = get_next_line(fd, &line)) > 0)
+	{
+		while (get_data_from_line(&line, &verts, pos))
+		{
+			add_to_screen(verts, img, idata);
+			pos.y++;
+		}
+		pos.x++;
+	}
 	(void)board;
 	(void)wdata;
 	return (0);
