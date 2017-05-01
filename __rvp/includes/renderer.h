@@ -2,6 +2,8 @@
 # define RENDERER_H
 
 #include "board.h"
+#include "imgdata.h"
+#include "wdata.h"
 
 typedef enum    e_mode
 {
@@ -9,6 +11,7 @@ typedef enum    e_mode
     ISO
 }               t_mode;
 
-void            render(t_board *board, t_mode mode);
+void            render(t_board *board, t_imgdata *iptr, t_mode mode,
+                        t_wdata *wdata);
 
 #endif

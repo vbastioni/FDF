@@ -60,13 +60,9 @@ t_vertex	get_vertex(char **line, int x, int y)
 	return (vec);
 }
 
-#include <stdio.h>
-
-static int	convert_data(t_board *board, char *line, int y,
-							t_imgdata *iptr)
+static int	convert_data(t_board *board, char *line, int y)
 {
 	int		x;
-	char	*addr;
 
 	if (!(board->vertex[y] = (t_vertex *)malloc(
 			sizeof(t_vertex) * board->pdims.x)))
@@ -79,8 +75,6 @@ static int	convert_data(t_board *board, char *line, int y,
 			board->alts.y = board->vertex[y][x].pos.z;
 		else if (board->vertex[y][x].pos.z < board->alts.x)
 			board->alts.x = board->vertex[y][x].pos.z;
-		addr = (iptr->addr + iptr->sl * y + iptr->bpx * x);
-		color_set(addr, board->vertex[y][x], iptr->endian, board->alts);
 	}
 	return (1);
 }
@@ -106,7 +100,7 @@ int 	    preparse_data(const char *filename, t_board **board)
 	return (1);
 }
 
-void		**parse_data(const char *filename, t_board *board,
+t_imgdata	*parse_data(const char *filename, t_board *board,
 							const t_wdata *wdata)
 {
 	int			fd;
@@ -121,9 +115,8 @@ void		**parse_data(const char *filename, t_board *board,
 	if (!(iptr = create_img(wdata, board)))
 		return (NULL);
 	while ((gnl = get_next_line(fd, &line)) > 0 &&
-			convert_data(board, line, y, iptr))
+			convert_data(board, line, y))
 		y++;
-	mlx_put_image_to_window(wdata->mlx, wdata->win, iptr->img, 0, 0);
 	close(fd);
-	return (0);
+	return (iptr);
 }
