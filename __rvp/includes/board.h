@@ -8,6 +8,7 @@ typedef struct  s_board
 {
     t_vertex    **vertex;
     t_dims      pdims;
+    t_dims      alts;
 }               t_board;
 
 t_board         *board_create();

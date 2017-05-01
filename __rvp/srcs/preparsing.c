@@ -4,10 +4,12 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+#include <mlx.h>
+
 #include "get_next_line.h"
 #include "libft.h"
-
-#include <stdio.h>
+#include "color.h"
+#include "imgdata.h"
 
 static int	count_elem(const char *str)
 {
@@ -58,16 +60,28 @@ t_vertex	get_vertex(char **line, int x, int y)
 	return (vec);
 }
 
-static int	convert_data(t_board *board, char *line, int y)
+#include <stdio.h>
+
+static int	convert_data(t_board *board, char *line, int y,
+							t_imgdata *iptr)
 {
 	int		x;
+	char	*addr;
 
 	if (!(board->vertex[y] = (t_vertex *)malloc(
 			sizeof(t_vertex) * board->pdims.x)))
 		return (0);
 	x = -1;
 	while (++x < board->pdims.x)
-        board->vertex[y][x] = get_vertex(&line, x, y);
+	{
+		board->vertex[y][x] = get_vertex(&line, x, y);
+		if (board->vertex[y][x].pos.z > board->alts.y)
+			board->alts.y = board->vertex[y][x].pos.z;
+		else if (board->vertex[y][x].pos.z < board->alts.x)
+			board->alts.x = board->vertex[y][x].pos.z;
+		addr = (iptr->addr + iptr->sl * y + iptr->bpx * x);
+		color_set(addr, board->vertex[y][x], iptr->endian, board->alts);
+	}
 	return (1);
 }
 
@@ -92,19 +106,24 @@ int 	    preparse_data(const char *filename, t_board **board)
 	return (1);
 }
 
-void		**parse_data(const char *filename, t_board *board)
+void		**parse_data(const char *filename, t_board *board,
+							const t_wdata *wdata)
 {
-	int		fd;
-	char	*line;
-	int		y;
-	int		gnl;
+	int			fd;
+	char		*line;
+	int			y;
+	int			gnl;
+	t_imgdata	*iptr;
 
 	y = 0;
     if (!(fd = open(filename, O_RDONLY)))
-		return (0);
+		return (NULL);
+	if (!(iptr = create_img(wdata, board)))
+		return (NULL);
 	while ((gnl = get_next_line(fd, &line)) > 0 &&
-			convert_data(board, line, y))
+			convert_data(board, line, y, iptr))
 		y++;
+	mlx_put_image_to_window(wdata->mlx, wdata->win, iptr->img, 0, 0);
 	close(fd);
 	return (0);
 }

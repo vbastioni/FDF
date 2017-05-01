@@ -10,6 +10,7 @@ t_board         *board_create()
         return (NULL);
     ret->vertex = NULL;
     ret->pdims = dims_zero();
+    ret->alts = dims_zero();
     return (ret);
 }
 

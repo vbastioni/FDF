@@ -28,10 +28,10 @@ static int  change_imgs(int keycode, t_wdata *wdata, void **imgs)
     (void)wdata;
     (void)imgs;
     ft_putstr("Pressed ");
-    if (keycode == 18) {
+    if (keycode == KEY_PARA) {
         ft_putnbr(keycode);
         ft_putstr(": 1.\n");
-    } else if (keycode == 19) {
+    } else if (keycode == KEY_ISO) {
         ft_putnbr(keycode);
         ft_putstr(": 2.\n");
     }
