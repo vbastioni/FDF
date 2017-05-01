@@ -1,13 +1,11 @@
 #include "defs.h"
 
 #include <mlx.h>
-#include <stdlib.h>//
-#include "libft.h"//
 
 #include "board.h"
 #include "wdata.h"
 #include "callback.h"
-#include "preparsing.h"
+#include "parsing.h"
 #include "t2.h"
 
 int     main(int ac, char **av)
