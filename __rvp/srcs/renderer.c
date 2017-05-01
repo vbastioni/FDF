@@ -5,18 +5,30 @@
 #include "color.h"
 #include "defs.h"
 
+static void get_deltas(const t_board *board, t_dims *delta, t_dims *inter)
+{
+    int     n;
+    int     d;
+
+    d = (BOARD_MAX_WIDTH - board->pdims.x);
+    n = (d / (board->pdims.x - 1));
+    delta->x = ((board->pdims.x * 2 - 1) > BOARD_MAX_WIDTH) ?
+        (d / 2) : ((d % n) / 2);
+    d = (BOARD_MAX_HEIGHT - board->pdims.y);
+    n = (d / (board->pdims.y - 1));
+    delta->y = ((board->pdims.y * 2 - 1) > BOARD_MAX_HEIGHT) ?
+        (d / 2) : ((d % n) / 2);
+    (void)inter;
+}
+
 static void render_par(t_board *board, t_imgdata *iptr, t_dims *delta)
 {
     int     x;
     int     y;
     char    *addr;
+    t_dims  inter;
 
-    delta->x = (board->pdims.x < BOARD_MAX_WIDTH &&
-        (board->pdims.x * 2 - 1) > BOARD_MAX_WIDTH) ?
-        ((BOARD_MAX_WIDTH - board->pdims.x) / 2) : 0;
-    delta->y = (board->pdims.y < BOARD_MAX_HEIGHT &&
-        (board->pdims.y * 2 - 1) > BOARD_MAX_HEIGHT) ?
-        ((BOARD_MAX_HEIGHT - board->pdims.y) / 2) : 0;
+    get_deltas(board, delta, &inter);
     y = 0;
     while (y < board->pdims.y)
     {
