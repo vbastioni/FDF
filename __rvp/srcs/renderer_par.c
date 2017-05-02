@@ -23,19 +23,22 @@ static void render_right(t_board *board, t_imgdata *iptr,
     int         x;
     t_vertex    c;
     t_vertex    n;
+    int         c1;
+    int         c2;
 
     if ((pos.x + 1) == board->pdims.x)
         return ;
     c = board->vertex[pos.y][pos.x];
     n = board->vertex[pos.y][pos.x + 1];
     x = -1;
+    c1 = (c.color > -1 ? c.color : col_get(c.pos.z, alt))
+            << (iptr->endian ? 8 : 0);
+    c2 = (n.color > -1 ? n.color : col_get(n.pos.z, alt))
+            << (iptr->endian ? 8 : 0);
     while (++x < inter.x)
     {
+        *((int *)(iptr->addr + )
     }
-    (void)board;
-    (void)iptr;
-    (void)pos;
-    (void)inter;
 }
 
 static void render_bottom(t_board *board, t_imgdata *iptr,
