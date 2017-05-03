@@ -1,6 +1,6 @@
 #include <math.h>
 
-#include "renderer_par.h"
+#include "renderer.h"
 
 #include "color.h"
 #include "defs.h"

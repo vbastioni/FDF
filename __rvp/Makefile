@@ -2,12 +2,14 @@ NAME=fdf
 LIB=fdf.a
 CC=gcc
 CFLAGS=-Wall -Wextra -Werror
-LIBS=-lmlx -framework OpenGL -framework AppKit
-MLX=minilibx_macos
 GNL=./gnl
 FT=./libft
+LIBS=-lmlx -framework OpenGL -framework AppKit
+INCS=-I ${GNL} -I ${FT}
+MLX=minilibx_macos
 ifeq ("$t", "true")
-LIBS +=-L $(MLX) -I $(MLX)
+LIBS +=-L $(MLX)
+INCS +=-I $(MLX)
 endif
 SRC_D=./srcs/
 INC_D=./includes/
@@ -22,8 +24,8 @@ ifeq ("$t", "true")
 	@tar -xf ../varz/minilibx_macos_20151105.tgz
 	@make -C $(MLX)
 endif
-	$(CC) $(CFLAGS) -c $? $(SRC) -I $(INC_D) -I ${GNL}/ -I ${FT} -I ${MLX}
-	$(CC) $(OBJ) ${GNL}/get_next_line.o -o $(NAME) -L ${FT}/ -lft -L ${MLX}/ -lmlx -framework OpenGL -framework AppKit
+	$(CC) $(CFLAGS) -c $? $(SRC) -I $(INC_D) -I ${GNL}/ -I ${FT} 
+	$(CC) $(OBJ) ${GNL}/get_next_line.o -o $(NAME) -L ${FT}/ -lft  $(LIBS)
 
 all: $(NAME)
 

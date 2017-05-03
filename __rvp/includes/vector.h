@@ -10,6 +10,12 @@ typedef struct  s_vector
     int         z;
 }               t_vector;
 
+typedef struct  s_fvector
+{
+    float       a;
+    float       b;
+}               t_fvector;
+
 void            vector_set(t_vector *vect, t_dims pos, int alt);
 
 #endif

@@ -2,12 +2,6 @@
 
 #include "defs.h"
 
-static  int abs(int n)
-{
-    return (n < 0 ? -n : n);
-    return ((n < 0 && ((n + 1) > 0)) ? -n : n);
-}
-
 int  col_get(int v, t_dims alts)
 {
     float pct;
