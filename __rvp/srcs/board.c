@@ -18,8 +18,8 @@ int             board_prepare(t_board *board)
 {
     if (!board)
         return (0);
-    if (!(board->vertex = (t_vertex **)malloc(
-            sizeof(t_vertex *) * board->pdims.y)))
+    if (!(board->vertex = (t_vertex **)malloc(sizeof(t_vertex *)
+                                                * board->pdims.y)))
         return (0);
     return (1);
 }

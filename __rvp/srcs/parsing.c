@@ -46,6 +46,8 @@ t_vertex	get_vertex(char **line, int x, int y)
 	vec.pos.z = ft_atoi(*line);
 	while (ft_isspace(**line))
 		(*line)++;
+	if (*(*line) == '-' || *(*line) == '+')
+		(*line)++;
 	while (ft_isdigit(**line))
 		(*line)++;
 	if (ft_strncmp(*line, ",0x", 3) == 0)

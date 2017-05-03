@@ -9,8 +9,8 @@
 # define KEY_PARA 18
 # define KEY_ISO 19
 
-# define COL_LOW 0x4286F4
-# define COL_HIGH 0xAF6E05
+# define COL_LOW 0x15439b
+# define COL_HIGH 0x9b4815
 # define COL_DEF 0xFFFFFF
 
 # ifdef PI

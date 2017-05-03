@@ -25,11 +25,15 @@ endif
 	$(CC) $(CFLAGS) -c $? $(SRC) -I $(INC_D) -I ${GNL}/ -I ${FT} -I ${MLX}
 	$(CC) $(OBJ) ${GNL}/get_next_line.o -o $(NAME) -L ${FT}/ -lft -L ${MLX}/ -lmlx -framework OpenGL -framework AppKit
 
+all: $(NAME)
+
 clean:
 	rm -f $(OBJ)
 
 fclean: clean
 	rm -f $(NAME)
+
+re: fclean all
 
 mrproper: fclean
 	rm -rf $(MLX)
