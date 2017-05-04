@@ -8,5 +8,6 @@ typedef struct  s_dims
 }               t_dims;
 
 t_dims          dims_zero();
+t_dims          dims_create(int x, int y);
 
 #endif

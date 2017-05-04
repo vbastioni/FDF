@@ -116,10 +116,10 @@ void render_par(t_board *board, t_imgdata *iptr, t_dims *delta)
         pos.x = -1;
         while (++pos.x < board->pdims.x)
         {
-            addr = iptr->addr + pos.x * iptr->bpx * (inter.x + 1) +
-                                pos.y * iptr->sl * (inter.y + 1);
-            color_set(addr, board->vertex[pos.y][pos.x], 
-                        iptr->endian, board->alts);
+            addr = iptr->addr + pos.x * iptr->bpx * (inter.x + 1)
+                    + pos.y * iptr->sl * (inter.y + 1);
+            color_set(addr, board->vertex[pos.y][pos.x],  iptr->endian,
+                        board->alts);
             render_right(board, iptr, pos, inter);
             render_bottom(board, iptr, pos, inter);
             render_diag(board, iptr, pos, inter);

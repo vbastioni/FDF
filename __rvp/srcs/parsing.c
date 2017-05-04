@@ -102,23 +102,19 @@ int 	    preparse_data(const char *filename, t_board **board)
 	return (1);
 }
 
-t_imgdata	*parse_data(const char *filename, t_board *board,
-							const t_wdata *wdata)
+int			parse_data(const char *filename, t_board *board)
 {
-	int			fd;
-	char		*line;
-	int			y;
-	int			gnl;
-	t_imgdata	*iptr;
+	int		fd;
+	char	*line;
+	int		y;
+	int		gnl;
 
 	y = 0;
     if (!(fd = open(filename, O_RDONLY)))
-		return (NULL);
-	if (!(iptr = create_img(wdata, board)))
-		return (NULL);
+		return (0);
 	while ((gnl = get_next_line(fd, &line)) > 0 &&
 			convert_data(board, line, y))
 		y++;
 	close(fd);
-	return (iptr);
+	return (1);
 }

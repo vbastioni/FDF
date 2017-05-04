@@ -1,8 +1,8 @@
 #ifndef DEFS_H
 # define DEFS_H
 
-# define BOARD_MAX_WIDTH 800
-# define BOARD_MAX_HEIGHT 800
+# define BOARD_MAX_WIDTH 1200
+# define BOARD_MAX_HEIGHT 1200
 # define BOARD_NAME ("FdF")
 
 # define KEY_EXIT 53

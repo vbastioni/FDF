@@ -16,6 +16,7 @@ typedef struct  s_fvector
     float       b;
 }               t_fvector;
 
-void            vector_set(t_vector *vect, t_dims pos, int alt);
+void            vec_mult(t_vector *v, int n);
+void            fvec_mult(t_fvector *v, int n);
 
 #endif

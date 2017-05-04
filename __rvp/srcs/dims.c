@@ -8,3 +8,12 @@ t_dims          dims_zero()
     dims.y = 0;
     return (dims);
 }
+
+t_dims          dims_create(int x, int y)
+{
+    t_dims      dims;
+
+    dims.x = x;
+    dims.y = y;
+    return (dims);
+}

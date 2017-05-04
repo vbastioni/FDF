@@ -14,7 +14,6 @@ typedef struct  s_imgdata
     int         endian;
 }               t_imgdata;
 
-t_imgdata       *create_img(const t_wdata *wdata,
-                            const t_board *board);
+t_imgdata       create_img(const t_wdata *wdata);
 
 #endif
