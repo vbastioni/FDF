@@ -19,21 +19,22 @@ static void 		set_delta(t_dims *delta, t_board *board)
 	(void)delta;
 }
 
-# define DELTA_POS 500
-# define Z_COEFF 1.00
+# define DELTA_POS 450
+# define Z_COEFF 0.11
 
-static t_fvector	get_iso_pos(t_vector pos, int max/*, t_board *board*/)
+static t_fvector	get_iso_pos(t_vector pos, int max)
 {
 	t_fvector		ret;
 
 	(void)max;
-	ret.a = pos.x * (cos(PI / 6)) - (pos.y * cos(PI / 6));
-	ret.b = ((pos.z + ((pos.x + pos.y) * 0.5))) * Z_COEFF;
+	ret.a = -(pos.x * (cos(PI / 6)) - (pos.y * cos(PI / 6)));
+	ret.b = -((pos.z * Z_COEFF + ((pos.x + pos.y) * 0.5)));
 	return (ret);
 } 
 
 
-void				line_to(t_vector f, t_vector t, t_board *board, t_imgdata *iptr, int max_h)
+void				line_to(t_vector f, t_vector t, t_board *board,
+							t_imgdata *iptr, int max_h)
 {
 	t_fvector		p[2];
 	t_fvector		delta;
@@ -47,14 +48,14 @@ void				line_to(t_vector f, t_vector t, t_board *board, t_imgdata *iptr, int max
 	delta.a = (p[1].a - p[0].a);
 	delta.b = (p[1].b - p[0].b);
 	dist = (int)(sqrt(delta.a * delta.a + delta.b * delta.b) * 10 + 0.5);
-	for (i = 0; i < dist; i++) {
+	for (i = (dist - 1); i > 0; i--) {
 		progress = (i / (float)dist);
 		tmp.a = (p[0].a + (p[1].a - p[0].a) * progress);
 		tmp.b = (p[0].b + (p[1].b - p[0].b) * progress);
 		*((int *)(iptr->addr + ((int)(tmp.a + 0.5) + DELTA_POS) * iptr->bpx
 					+ ((int)(tmp.b + 0.5) + DELTA_POS) * iptr->sl))
 			= (color_lerp(col_get(f.z, board->alts),
-						col_get(t.z, board->alts), progress));
+							col_get(t.z, board->alts), progress));
 	}
 }
 
@@ -71,9 +72,9 @@ void        render_iso(t_board *board, t_imgdata *iptr, t_dims *delta)
 	set_delta(delta, board);
 	delta->x = 0;
 	delta->y = 0;
-	for(y = 0; y < max.y; y++)
+	for(y = (max.y - 1); y > 0; y--)
 	{
-		for(x = 0; x < max.x; x++)
+		for(x = (max.x - 1); x > 0; x--)
 		{
 			line_to(board->vertex[y][x].pos, board->vertex[y][x + 1].pos, board, iptr, max_h);
 			line_to(board->vertex[y][x].pos, board->vertex[y + 1][x].pos, board, iptr, max_h);

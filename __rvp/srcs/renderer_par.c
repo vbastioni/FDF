@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include <math.h>
 
 #include "renderer.h"
@@ -5,124 +7,74 @@
 #include "color.h"
 #include "defs.h"
 
+
 static void get_deltas(const t_board *board, t_dims *delta, t_dims *in)
 {
-    int     d;
+	t_dims     d;
 
-    d = (BOARD_MAX_WIDTH - board->pdims.x);
-    in->x = (d / (board->pdims.x - 1));
-    delta->x = ((board->pdims.x * 2 - 1) > BOARD_MAX_WIDTH) ? (d / 2) :
-        (BOARD_MAX_WIDTH - (in->x * (board->pdims.x - 1) + board->pdims.x)) / 2;
-    d = (BOARD_MAX_HEIGHT - board->pdims.y);
-    in->y = (d / (board->pdims.y - 1));
-    if (in->x > in->y)
-        in->x = in->y;
-    else if (in->x < in->y)
-        in->y = in->x;
-    delta->y = ((board->pdims.y * 2 - 1) > BOARD_MAX_HEIGHT) ? (d / 2) :
-        (BOARD_MAX_WIDTH - (in->y * (board->pdims.y - 1) + board->pdims.y)) / 2;
+	d.x = (BOARD_MAX_WIDTH - board->pdims.x);
+	in->x = (d.x / (board->pdims.x - 1));
+	d.y = (BOARD_MAX_HEIGHT - board->pdims.y);
+	in->y = (d.y / (board->pdims.y - 1));
+	if (in->x > in->y)
+		in->x = in->y;
+	else if (in->x < in->y)
+		in->y = in->x;
+	delta->x = (BOARD_MAX_WIDTH - (in->x * (board->pdims.x - 1) + board->pdims.x)) / 2;
+	delta->y = (BOARD_MAX_HEIGHT - (in->y * (board->pdims.y - 1) + board->pdims.y)) / 2;
+	printf("inter: [%d, %d], d: [%d, %d], delta: [%d, %d]\n",
+			in->x, in->y, d.x, d.y, delta->x, delta->y);
 }
 
-static void render_right(t_board *board, t_imgdata *iptr,
-                            const t_dims pos, const t_dims in)
+static void render_to(t_board *board, t_imgdata *iptr,
+						t_dir dir, t_dims2 dms, t_dims delta)
 {
-    int         x;
-    t_vertex    v[2];
-    int         c[2];
-    int         de;
-    char        *addr;
+	int			i;
+	t_vertex	v[2];
+	int			c[2];
+	int			de;
+	char		*addr;
 
-    if ((pos.x + 1) == board->pdims.x || in.x == 0)
-        return ;
-    v[0] = board->vertex[pos.y][pos.x];
-    v[1] = board->vertex[pos.y][pos.x + 1];
-    c[0] = (v[0].color > -1 ? v[0].color : col_get(v[0].pos.z, board->alts))
-            << (iptr->endian ? 8 : 0);
-    c[1] = (v[1].color > -1 ? v[1].color : col_get(v[1].pos.z, board->alts))
-            << (iptr->endian ? 8 : 0);
-    x = 0;
-    while (++x <= in.x)
-    {
-        de = (pos.x * (in.x + 1) + x) * iptr->bpx
-                + pos.y * (in.y + 1) * iptr->sl;
-        addr = iptr->addr + de;
-        *((int *)addr) = color_lerp(c[0], c[1], (double)x / (in.x + 1));
-    }
-}
-
-static void render_bottom(t_board *board, t_imgdata *iptr,
-                            const t_dims pos, const t_dims in)
-{
-    int         y;
-    t_vertex    v[2];
-    int         c[2];
-    int         de;
-    char        *addr;
-
-    if ((pos.y + 1) == board->pdims.y || in.y == 0)
-        return ;
-    v[0] = board->vertex[pos.y][pos.x];
-    v[1] = board->vertex[pos.y + 1][pos.x];
-    y = 0;
-    c[0] = (v[0].color > -1 ? v[0].color : col_get(v[0].pos.z, board->alts));
-    c[1] = (v[1].color > -1 ? v[1].color : col_get(v[1].pos.z, board->alts));
-    while (++y <= in.y)
-    {
-        de = (pos.x * (in.x + 1)) * iptr->bpx
-                + (pos.y * (in.y + 1) + y) * iptr->sl;
-        addr = iptr->addr + de;
-        *((int *)addr) = color_lerp(c[0], c[1], (double)y / (in.y + 1));
-    }
-}
-
-static void render_diag(t_board *board, t_imgdata *iptr,
-                            const t_dims pos, const t_dims in)
-{
-    int         i;
-    t_vertex    v[2];
-    int         c[2];
-    int         de;
-    char        *addr;
-
-    if ((pos.x + 1) == board->pdims.x || (pos.y + 1) == board->pdims.y
-        || in.x == 0 || in.y == 0)
-        return ;
-    v[0] = board->vertex[pos.y][pos.x];
-    v[1] = board->vertex[pos.y + 1][pos.x + 1];
-    c[0] = (v[0].color > -1 ? v[0].color : col_get(v[0].pos.z, board->alts))
-            << (iptr->endian ? 8 : 0);
-    c[1] = (v[1].color > -1 ? v[1].color : col_get(v[1].pos.z, board->alts))
-            << (iptr->endian ? 8 : 0);
-    i = 0;
-    while (++i <= in.x)
-    {
-        de = (pos.x * (in.x + 1) + i) * iptr->bpx
-                + (pos.y * (in.y + 1) + i) * iptr->sl;        
-        addr = iptr->addr + de;
-        *((int *)addr) = color_lerp(c[0], c[1], (double)i / (in.y + 1));
-    }
+	if ((dms.px + (dir != 1)) == board->pdims.x || dms.ix == 0
+		|| (dms.py + (dir > 0)) == board->pdims.y || dms.iy == 0)
+		return ;
+	v[0] = board->vertex[dms.py][dms.px];
+	v[1] = (board->vertex[dms.py + (dir > 0)][dms.px + (dir != 1)]);
+	c[0] = (v[0].color > -1 ? v[0].color : col_get(v[0].pos.z, board->alts));
+	c[1] = (v[1].color > -1 ? v[1].color : col_get(v[1].pos.z, board->alts));
+	i = 0;
+	while (++i <= (dms.ix))
+	{
+		de = ((dms.px * (dms.ix + 1) + (i * (dir != 1))) * iptr->bpx
+				+ (dms.py * (dms.iy + 1) + (i * (dir > 0))) * iptr->sl)
+				+ delta.x * iptr->bpx + delta.y * iptr->sl;
+		addr = iptr->addr + de;
+		*((int *)addr) = color_lerp(c[0], c[1], (double)i / (dms.ix + 1));
+	}
 }
 
 void render_par(t_board *board, t_imgdata *iptr, t_dims *delta)
 {
-    t_dims  pos;
-    char    *addr;
-    t_dims  inter;
+	t_dims  pos;
+	char    *addr;
+	t_dims  inter;
 
-    get_deltas(board, delta, &inter);
-    pos.y = -1;
-    while (++pos.y < board->pdims.y)
-    {
-        pos.x = -1;
-        while (++pos.x < board->pdims.x)
-        {
-            addr = iptr->addr + pos.x * iptr->bpx * (inter.x + 1)
-                    + pos.y * iptr->sl * (inter.y + 1);
-            color_set(addr, board->vertex[pos.y][pos.x],  iptr->endian,
-                        board->alts);
-            render_right(board, iptr, pos, inter);
-            render_bottom(board, iptr, pos, inter);
-            render_diag(board, iptr, pos, inter);
-        }
-    }
+	get_deltas(board, delta, &inter);
+	pos.y = -1;
+	while (++pos.y < board->pdims.y)
+	{
+		pos.x = -1;
+		while (++pos.x < board->pdims.x)
+		{
+			addr = iptr->addr 
+					+ iptr->bpx * (delta->x + pos.x * (inter.x + 1))
+                    + iptr->sl * (delta->y + pos.y * (inter.y + 1));
+			color_set(addr, board->vertex[pos.y][pos.x],  iptr->endian,
+						board->alts);
+			render_to(board, iptr, RIG, dims_arr(pos, inter), *delta);
+			render_to(board, iptr, BOT, dims_arr(pos, inter), *delta);
+			render_to(board, iptr, DIA, dims_arr(pos, inter), *delta);
+		}
+	}
+	(void)addr;
 }
