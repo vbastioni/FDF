@@ -1,5 +1,3 @@
-#include <stdio.h>//
-
 #include <math.h>
 
 #include "renderer.h"
@@ -7,77 +5,140 @@
 #include "vector.h"
 #include "color.h"
 
-static void 		set_delta(t_dims *delta, t_board *board)
-{
-	t_dims      	d;
-	t_fvector   	sz_vec;
+# define Z_COEFF (0.20)
+# define ANG (30)
+# define OPP_ANG (180 - ANG)
+# define LINE_PRE 10
 
-	d = board->pdims;
-	sz_vec.a = (((d.x < d.y) ? d.y : d.y) * 0.25f + 0.5f
-				+ board->alts.x + board->alts.y);
-	sz_vec.b = (d.x + d.y) * cos(PI / 6.0f);
-	(void)delta;
+static inline double	d2r(double deg)
+{
+	return (deg * PI / 180.0);
 }
 
-# define DELTA_POS 450
-# define Z_COEFF 0.11
+static inline double	abs(double f)
+{
+	return (f < 0 ? -f : f);
+}
 
-static t_fvector	get_iso_pos(t_vector pos, int max)
+static t_fvector	get_iso_pos(t_vector pos, float scale)
 {
 	t_fvector		ret;
 
-	(void)max;
-	ret.a = -(pos.x * (cos(PI / 6)) - (pos.y * cos(PI / 6)));
-	ret.b = -((pos.z * Z_COEFF + ((pos.x + pos.y) * 0.5)));
+	ret.a = -(pos.x * abs(cos(d2r(ANG))) - (pos.y * abs(cos(d2r(OPP_ANG))))) * scale;
+	ret.b = -(pos.z * Z_COEFF + pos.x * sin(d2r(ANG)) + pos.y * sin(d2r(OPP_ANG))) * scale;
 	return (ret);
 } 
 
-
-void				line_to(t_vector f, t_vector t, t_board *board,
-							t_imgdata *iptr, int max_h)
+static inline void 		set_delta(t_dims *delta, float *scale, 
+									const t_board *board)
 {
-	t_fvector		p[2];
-	t_fvector		delta;
-	t_fvector		tmp;
-	int				dist;
-	int				i;
-	float 			progress;
+	t_dims				obj_sz;
+	t_dims				scales;
 
-	p[0] = get_iso_pos(f, max_h);
-	p[1] = get_iso_pos(t, max_h);
-	delta.a = (p[1].a - p[0].a);
-	delta.b = (p[1].b - p[0].b);
-	dist = (int)(sqrt(delta.a * delta.a + delta.b * delta.b) * 10 + 0.5);
-	for (i = (dist - 1); i > 0; i--) {
-		progress = (i / (float)dist);
-		tmp.a = (p[0].a + (p[1].a - p[0].a) * progress);
-		tmp.b = (p[0].b + (p[1].b - p[0].b) * progress);
-		*((int *)(iptr->addr + ((int)(tmp.a + 0.5) + DELTA_POS) * iptr->bpx
-					+ ((int)(tmp.b + 0.5) + DELTA_POS) * iptr->sl))
-			= (color_lerp(col_get(f.z, board->alts),
-							col_get(t.z, board->alts), progress));
+	obj_sz.x = (int)((board->pdims.x + board->pdims.y)
+					* abs(cos(d2r(ANG))) + 0.5);
+	obj_sz.y = (int)((board->alts.y + abs(board->alts.x)) * Z_COEFF
+					+ (board->pdims.x + board->pdims.y) * sin(d2r(ANG)));
+	scales.x = BOARD_MAX_WIDTH / obj_sz.x;
+	scales.y = BOARD_MAX_HEIGHT / obj_sz.y;
+	*scale = scales.x < scales.y ? scales.x : scales.y;
+    delta->x = (board->pdims.x * (abs(cos(d2r(ANG)))) * *scale
+				- ((board->pdims.x + board->pdims.y) * abs(cos(d2r(ANG)))
+					* *scale / 2) - BOARD_MAX_WIDTH / 2);
+	delta->y = BOARD_MAX_HEIGHT + board->alts.x * Z_COEFF * *scale;
+}
+
+/*
+static void			line_to(const t_dims pos, const t_dir dir,
+							const t_board *board, const t_imgdata *iptr, 
+							const t_dims *delta_dim, const float scale)
+{
+	t_fvector			v[4];
+	t_vertex			ve[2];
+	int					c[4];
+	float 				progress;
+	char 				*addr;
+
+	ve[0] = board->vertex[pos.y][pos.x];
+	ve[1] = board->vertex[pos.y + dir > 0][pos.x + dir != 1];
+	v[0] = get_iso_pos(ve[0].pos, scale);
+	v[1] = get_iso_pos(ve[1].pos, scale);
+	c[0] = ve[0].color != -1 ? ve[0].color : col_get(ve[0].pos.z, board->alts);
+	c[1] = ve[1].color != -1 ? ve[1].color : col_get(ve[1].pos.z, board->alts);
+	v[2].a = (v[1].a - v[0].a);
+	v[2].b = (v[1].b - v[0].b);
+	c[2] = (int)(sqrt(v[2].a * v[2].a + v[2].b * v[2].b) * LINE_PRE + 0.5);
+	c[3] = 0;
+	while (c[3] < c[2])
+	{
+		progress = (c[3] / (float)c[2]);
+		v[3].a = (v[0].a + (v[1].a - v[0].a) * progress);
+		v[3].b = (v[0].b + (v[1].b - v[0].b) * progress);
+		addr = (iptr->addr + ((int)(v[3].a + 0.5 + delta_dim->x)) * iptr->bpx
+					+ ((int)(v[3].b + 0.5 + delta_dim->y)) * iptr->sl);
+		*((int *)addr) = (color_lerp(c[0], c[1], progress));
+		c[3]++;
+	}
+}
+*/
+
+static void			line_to(const t_vertex f, const t_vertex t,
+								const t_board *board, const t_imgdata *iptr, 
+								const t_dims *delta_dim, const float scale)
+{
+	t_fvector			v[4];
+	int					c[4];
+	float 				progress;
+	char 				*addr;
+
+	v[0] = get_iso_pos(f.pos, scale);
+	v[1] = get_iso_pos(t.pos, scale);
+	c[0] = f.color != -1 ? f.color : col_get(f.pos.z, board->alts);
+	c[1] = t.color != -1 ? t.color : col_get(t.pos.z, board->alts);
+	v[2].a = (v[1].a - v[0].a);
+	v[2].b = (v[1].b - v[0].b);
+	c[2] = (int)(sqrt(v[2].a * v[2].a + v[2].b * v[2].b) * LINE_PRE + 0.5);
+	c[3] = 0;
+	while (c[3] < c[2])
+	{
+		progress = (c[3] / (float)c[2]);
+		v[3].a = (v[0].a + (v[1].a - v[0].a) * progress);
+		v[3].b = (v[0].b + (v[1].b - v[0].b) * progress);
+		addr = (iptr->addr + ((int)(v[3].a + 0.5 + delta_dim->x)) * iptr->bpx
+					+ ((int)(v[3].b + 0.5 + delta_dim->y)) * iptr->sl);
+		*((int *)addr) = (color_lerp(c[0], c[1], progress));
+		c[3]++;
 	}
 }
 
-void        render_iso(t_board *board, t_imgdata *iptr, t_dims *delta)
-{
-	const t_dims	max = {.x = board->pdims.x - 1, .y = board->pdims.y - 1};
-	int 			x,
-					y,
-					max_h;
 
-	max_h = (int)(board->alts.y
-				+ ((board->pdims.x < board->pdims.y) ? 
-					board->pdims.y : board->pdims.x) * 0.5);
-	set_delta(delta, board);
-	delta->x = 0;
-	delta->y = 0;
-	for(y = (max.y - 1); y > 0; y--)
+void					render_iso(const t_board *board, const t_imgdata *iptr,
+									t_dims *delta)
+{
+	const t_dims		max = {.x = board->pdims.x - 1, 
+								.y = board->pdims.y - 1};
+    float				scale;
+    t_dims				its;
+	
+	set_delta(delta, &scale, board);
+	its = dims_create(max.x, max.y);
+	while (--its.y >= 0)
 	{
-		for(x = (max.x - 1); x > 0; x--)
+		while (--its.x >= 0)
 		{
-			line_to(board->vertex[y][x].pos, board->vertex[y][x + 1].pos, board, iptr, max_h);
-			line_to(board->vertex[y][x].pos, board->vertex[y + 1][x].pos, board, iptr, max_h);
+			line_to(board->vertex[its.y][its.x],
+					board->vertex[its.y][its.x + 1], board, iptr, delta, scale);
+			line_to(board->vertex[its.y][its.x],
+					board->vertex[its.y + 1][its.x], board, iptr, delta, scale);
+			line_to(board->vertex[its.y][its.x],
+					board->vertex[its.y + 1][its.x + 1],
+					board, iptr, delta, scale);
+					/*
+            line_to(its, RIG, board, iptr, delta, scale);
+			line_to(its, BOT, board, iptr, delta, scale);
+			line_to(its, DIA, board, iptr, delta, scale);
+        */
 		}
+		its.x = max.x;
 	}
 }

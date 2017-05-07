@@ -7,7 +7,8 @@
 
 #include <stdio.h>
 
-void    render(t_board *board, t_imgdata *iptr, t_mode mode, t_wdata *wdata)
+void    render(const t_board *board, t_imgdata *iptr, t_mode mode,
+                t_wdata *wdata)
 {
     t_dims  delta;
 

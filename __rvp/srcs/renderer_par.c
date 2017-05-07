@@ -26,7 +26,7 @@ static void get_deltas(const t_board *board, t_dims *delta, t_dims *in)
 			in->x, in->y, d.x, d.y, delta->x, delta->y);
 }
 
-static void render_to(t_board *board, t_imgdata *iptr,
+static void render_to(const t_board *board, const t_imgdata *iptr,
 						t_dir dir, t_dims2 dms, t_dims delta)
 {
 	int			i;
@@ -53,7 +53,7 @@ static void render_to(t_board *board, t_imgdata *iptr,
 	}
 }
 
-void render_par(t_board *board, t_imgdata *iptr, t_dims *delta)
+void render_par(const t_board *board, const t_imgdata *iptr, t_dims *delta)
 {
 	t_dims  pos;
 	char    *addr;
@@ -76,5 +76,4 @@ void render_par(t_board *board, t_imgdata *iptr, t_dims *delta)
 			render_to(board, iptr, DIA, dims_arr(pos, inter), *delta);
 		}
 	}
-	(void)addr;
 }

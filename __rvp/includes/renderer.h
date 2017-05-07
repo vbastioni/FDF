@@ -18,11 +18,14 @@ typedef enum	e_dir
 	DIA = 2
 }				t_dir;                  
 
-void			render(t_board *board, t_imgdata *iptr, t_mode mode,
+void			render(const t_board *board, t_imgdata *iptr, t_mode mode,
 						t_wdata *wdata);
-void			render_par(t_board *board, t_imgdata *iptr, t_dims *delta);
-void			render_iso(t_board *board, t_imgdata *iptr, t_dims *delta);
+void			render_par(const t_board *board, const t_imgdata *iptr, 
+                            t_dims *delta);
+void			render_iso(const t_board *board, const t_imgdata *iptr, 
+                            t_dims *delta);
 
-void			(*rdrs[2])(t_board *board, t_imgdata *ptr, t_dims *delta);
+void			(*rdrs[2])(const t_board *board, const t_imgdata *ptr, 
+                            t_dims *delta);
 
 #endif
