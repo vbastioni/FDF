@@ -40,8 +40,8 @@ static void render_to(const t_board *board, const t_imgdata *iptr,
 		return ;
 	v[0] = board->vertex[dms.py][dms.px];
 	v[1] = (board->vertex[dms.py + (dir > 0)][dms.px + (dir != 1)]);
-	c[0] = (v[0].color > -1 ? v[0].color : col_get(v[0].pos.z, board->alts));
-	c[1] = (v[1].color > -1 ? v[1].color : col_get(v[1].pos.z, board->alts));
+    c[0] = (col_get(v[0], board->alts));
+    c[1] = (col_get(v[1], board->alts));
 	i = 0;
 	while (++i <= (dms.ix))
 	{

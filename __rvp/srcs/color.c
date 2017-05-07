@@ -2,18 +2,20 @@
 
 #include "defs.h"
 
-int  col_get(int v, t_dims alts)
+int  col_get(t_vertex v, const t_dims alts)
 {
     float pct;
     
-    pct = (float)(v - alts.x) / (float)(alts.y - alts.x);
+	if (v.color != -1)
+		return (v.color);
+    pct = (float)(v.pos.z - alts.x) / (float)(alts.y - alts.x);
     return (color_lerp(COL_LOW, COL_HIGH, pct));
 }
 
 void        color_set(char *addr, t_vertex vert, int endian, t_dims alts)
 {
-    *((int *)addr) = (vert.color > -1 ? vert.color :
-        col_get(vert.pos.z, alts)) << ((endian) ? 8 : 0);
+    (void)endian;
+    *((int *)addr) = col_get(vert, alts);
 }
 
 typedef unsigned char   t_uchar;

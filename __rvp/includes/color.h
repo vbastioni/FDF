@@ -6,5 +6,5 @@
 
 void    color_set(char *addr, t_vertex vert, int endian, t_dims alts);
 int     color_lerp(int c_a, int c_b, double progress);
-int     col_get(int alt, t_dims alts);
+int     col_get(t_vertex v, const t_dims alts);
 #endif
