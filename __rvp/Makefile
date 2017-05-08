@@ -5,7 +5,7 @@ CFLAGS=-Wall -Wextra -Werror
 GNL=./gnl
 FT=./libft
 LIBS=-lmlx -framework OpenGL -framework AppKit
-INCS=-I ${GNL} -I ${FT}
+INCS=-I ${INC_D} -I ${GNL} -I ${FT}
 MLX=minilibx_macos
 ifeq ("$t", "true")
 LIBS +=-L $(MLX)
@@ -24,7 +24,7 @@ ifeq ("$t", "true")
 	@tar -xf ../varz/minilibx_macos_20151105.tgz
 	@make -C $(MLX)
 endif
-	$(CC) $(CFLAGS) -c $? $(SRC) -I $(INC_D) -I ${GNL}/ -I ${FT} 
+	$(CC) $(CFLAGS) -c $? $(SRC) ${INCS}
 	$(CC) $(OBJ) ${GNL}/get_next_line.o -o $(NAME) -L ${FT}/ -lft  $(LIBS)
 
 all: $(NAME)
@@ -38,4 +38,7 @@ fclean: clean
 re: fclean all
 
 mrproper: fclean
-	rm -rf $(MLX)
+	@printf "\e[31mCleaning Minilibx.\e[30;0m\n"
+	@rm -rf $(MLX)
+	@printf "\e[31mCleaning GNL.\e[30;0m\n"
+	@make -C ${GNL} fclean

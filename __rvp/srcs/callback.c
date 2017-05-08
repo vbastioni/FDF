@@ -7,21 +7,12 @@
 #include "renderer.h"
 #include "imgdata.h"
 #include "tX.h"
-#include "libft.h" //
 
 static int  exit_prg(t_wdata *wdata)
 {
     mlx_destroy_window(wdata->mlx, wdata->win);
     free(wdata);
     exit(0);
-    return (0);
-}
-
-static int  print_keycode(int keycode)
-{
-    ft_putstr("Pressed keycode: '");
-    ft_putnbr(keycode);
-    ft_putstr("'\n");
     return (0);
 }
 
@@ -50,7 +41,5 @@ int     handle_key(int keycode, void *param)
         exit_prg(wdata);
     else if (keycode == 18 || keycode == 19)
         change_imgs(keycode, board, wdata, iptr);
-    else
-        print_keycode(keycode);
     return (0);
 }

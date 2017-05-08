@@ -23,11 +23,14 @@ static inline double	abs(double f)
 static inline t_fvector	get_iso_pos(t_vector pos, float scale)
 {
 	t_fvector			ret;
+    t_fvector			tmp;
 
-	ret.a = (-(pos.x * abs(cos(d2r(ANG)))
+	tmp.a = (-(pos.x * abs(cos(d2r(ANG)))
 				- (pos.y * abs(cos(d2r(OPP_ANG))))) * scale);
-	ret.b = (-(pos.z * Z_COEFF + pos.x * sin(d2r(ANG))
+	tmp.b = (-(-pos.z * Z_COEFF + pos.x * sin(d2r(ANG))
 				+ pos.y * sin(d2r(OPP_ANG))) * scale);
+	ret.a = tmp.a * cos(PI) + tmp.b * -sin(PI);
+	ret.b = tmp.a * sin(PI) + tmp.b * cos(PI);
 	return (ret);
 }
 
@@ -79,6 +82,7 @@ static void				line_to(const t_dims pos, const t_dir dir,
 					+ ((int)(v[3].b + 0.5 + delta_dim->y)) * iptr->sl);
 		*((int *)addr) = (color_lerp(c[0], c[1], progress));
 	}
+	(void)delta_dim;
 }
 
 void					render_iso(const t_board *board, const t_imgdata *iptr,
@@ -88,10 +92,10 @@ void					render_iso(const t_board *board, const t_imgdata *iptr,
 	t_dims				its;
 
 	set_delta(delta, &scale, board);
-	its = dims_create(board->pdims.x, board->pdims.y);
-	while (--its.y >= 0)
+	its = dims_create(-1, -1);
+	while (++its.y < board->pdims.y)
 	{
-		while (--its.x >= 0)
+		while (++its.x < board->pdims.x)
 		{
 			if (its.x < board->pdims.x - 1)
 				line_to(its, RIG, board, iptr, delta, scale);
@@ -100,6 +104,6 @@ void					render_iso(const t_board *board, const t_imgdata *iptr,
 			if (its.x < board->pdims.x - 1 && its.y < board->pdims.y - 1)
 				line_to(its, DIA, board, iptr, delta, scale);
 		}
-		its.x = board->pdims.x;
+		its.x = -1;
 	}
 }
