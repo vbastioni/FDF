@@ -78,11 +78,38 @@ static void				line_to(const t_dims pos, const t_dir dir,
 		progress = (c[3] / (float)c[2]);
 		v[3].a = (v[0].a + (v[1].a - v[0].a) * progress);
 		v[3].b = (v[0].b + (v[1].b - v[0].b) * progress);
-		addr = (iptr->addr + ((int)(v[3].a + 0.5 + delta_dim->x)) * iptr->bpx
-					+ ((int)(v[3].b + 0.5 + delta_dim->y)) * iptr->sl);
+		addr = (iptr->addr + ((int)(v[3].a/* + 0.5 + delta_dim->x*/)) * iptr->bpx
+					+ ((int)(v[3].b + 0.5/* + delta_dim->y*/)) * iptr->sl);
 		*((int *)addr) = (color_lerp(c[0], c[1], progress));
 	}
 	(void)delta_dim;
+}
+
+t_vector				v_cr(int x, int y, int z)
+{
+	t_vector			vc;
+
+	vc.x = x;
+	vc.y = y;
+	vc.z = z;
+	return (vc);
+}
+
+static void				render_bounding_box(const t_board *board,
+											const t_imgdata *iptr,
+											const float scale)
+{
+	t_fvector			pts[8];
+
+	pts[0] = get_iso_pos(v_cr(0, 0, board->alts.x), scale);
+	pts[4] = get_iso_pos(v_cr(0, 0, board->alts.y), scale);
+    pts[1] = get_iso_pos(v_cr(board->pdims.x, 0, board->alts.x), scale);
+	pts[5] = get_iso_pos(v_cr(board->pdims.x, 0, board->alts.y), scale);
+    pts[2] = get_iso_pos(v_cr(0, board->pdims.y, board->alts.x), scale);
+	pts[6] = get_iso_pos(v_cr(0, board->pdims.y, board->alts.y), scale);
+	pts[3] = get_iso_pos(v_cr(board->pdims.x, board->pdims.y, board->alts.x), scale);
+	pts[7] = get_iso_pos(v_cr(board->pdims.x, board->pdims.y, board->alts.x), scale);
+	(void)iptr;
 }
 
 void					render_iso(const t_board *board, const t_imgdata *iptr,
@@ -93,6 +120,8 @@ void					render_iso(const t_board *board, const t_imgdata *iptr,
 
 	set_delta(delta, &scale, board);
 	its = dims_create(-1, -1);
+	render_bounding_box(board, iptr, scale);
+	return ;
 	while (++its.y < board->pdims.y)
 	{
 		while (++its.x < board->pdims.x)

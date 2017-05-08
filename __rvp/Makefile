@@ -42,3 +42,5 @@ mrproper: fclean
 	@rm -rf $(MLX)
 	@printf "\e[31mCleaning GNL.\e[30;0m\n"
 	@make -C ${GNL} fclean
+	@printf "\e[31mCleaning Libft.\e[30;0m\n"
+	@make -C ${FT} fclean
