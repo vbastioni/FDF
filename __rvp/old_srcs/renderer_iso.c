@@ -95,25 +95,6 @@ t_vector				v_cr(int x, int y, int z)
 	return (vc);
 }
 
-/*
-static void				render_bounding_box(const t_board *board,
-											const t_imgdata *iptr,
-											const float scale)
-{
-	t_fvector			pts[8];
-
-	pts[0] = get_iso_pos(v_cr(0, 0, board->alts.x), scale);
-	pts[4] = get_iso_pos(v_cr(0, 0, board->alts.y), scale);
-    pts[1] = get_iso_pos(v_cr(board->pdims.x, 0, board->alts.x), scale);
-	pts[5] = get_iso_pos(v_cr(board->pdims.x, 0, board->alts.y), scale);
-    pts[2] = get_iso_pos(v_cr(0, board->pdims.y, board->alts.x), scale);
-	pts[6] = get_iso_pos(v_cr(0, board->pdims.y, board->alts.y), scale);
-	pts[3] = get_iso_pos(v_cr(board->pdims.x, board->pdims.y, board->alts.x), scale);
-	pts[7] = get_iso_pos(v_cr(board->pdims.x, board->pdims.y, board->alts.x), scale);
-	(void)iptr;
-}
-*/
-
 void					render_iso(const t_board *board, const t_imgdata *iptr,
 									t_dims *delta)
 {

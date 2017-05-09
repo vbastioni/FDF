@@ -12,7 +12,6 @@ void    render(const t_board *board, t_imgdata *iptr, t_mode mode,
 {
     t_dims  delta;
 
-    printf("Will put img #%d\n", mode); //
     rdrs[0] = &render_par;
     rdrs[1] = &render_iso;
     rdrs[mode](board, iptr + mode, &delta);

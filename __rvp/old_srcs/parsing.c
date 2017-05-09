@@ -1,10 +1,15 @@
-#include "fdf.h"
+#include "parsing.h"
 
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdlib.h>
+
+#include <mlx.h>
 
 #include "get_next_line.h"
 #include "libft.h"
+#include "color.h"
+#include "imgdata.h"
 
 static inline int	count_elem(const char *str)
 {
@@ -48,12 +53,12 @@ static t_vertex		get_vertex(char **line, int x, int y)
 	if (ft_strncmp(*line, ",0x", 3) == 0)
 	{
 		(*line) += 3;
-		vec.color.color = ft_atoihex(*line);
+		vec.color = ft_atoihex(*line);
 		while (ft_isalnum(**line))
 			(*line)++;
 	}
 	else
-		vec.color.color = -1;
+		vec.color = -1;
 	return (vec);
 }
 
