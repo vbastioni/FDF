@@ -1,13 +1,48 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fdf.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/11 12:51:29 by vbastion          #+#    #+#             */
+/*   Updated: 2017/05/11 12:51:30 by vbastion         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FDF_H
 # define FDF_H
 
-# include <stdlib.h>
-# include "libft.h"
-#include <stdio.h> //
+# include <mlx.h>
 
-# define WIN_X 800
-# define WIN_Y 800
+# include <stdlib.h>
+# include <math.h>
+# include <stdio.h> //
+
+# include "libft.h"
+
+# define WIN_X 1200
+# define WIN_Y 1200
 # define WIN_NAME ("FdF")
+
+/*
+**	MATH AND ISO STUFFS
+*/
+
+# ifdef PI
+#  undef PI
+# endif
+# define PI (3.14159265358979323846)
+
+# define Z_COEFF (0.10)
+# define ANG (30)
+# define OPP_ANG (180 - ANG)
+# define LINE_PRE 10
+# define ANGLE_STEP 10
+
+/*
+**	COLORS
+*/
 
 # define COL_LOW_1 (0xFFFFFF)
 # define COL_LOW_2 (0xFF00FF)
@@ -17,12 +52,26 @@
 # define COL_HIGH_2 (0xFFFF00)
 # define COL_HIGH_3 (0x9B4815)
 
+/*
+**	KEYCODES
+*/
+
+# define KC_PAR 18
+# define KC_ISO 19
 # define KC_EXIT 53
 # define KC_CHANGE_COLOR 49
 # define KC_TURN_LEFT 123
 # define KC_TURN_RIGHT 124
 
-#define EVT_CLOSE_WIN 11
+/*
+**	APP EVENT
+*/
+
+# define EVT_CLOSE_WIN 11
+
+/*
+**	typedefs
+*/
 
 typedef unsigned char	t_uchar;
 
@@ -40,7 +89,7 @@ typedef struct s_env	t_env;
 typedef union u_color	t_color;
 
 /*
-**	DRAW 
+**	DRAW
 */
 
 enum					e_mode
@@ -57,6 +106,7 @@ enum					e_dir
 };
 
 void					draw_par(const t_env *env);
+void					draw_iso(const t_env *env);
 
 /*
 ** DIMS
@@ -115,7 +165,7 @@ typedef struct			s_fvector
 union					u_color
 {
 	int					color;
-	t_uchar				c[4];	
+	t_uchar				c[4];
 };
 
 int						color_lerp(int c_a, int c_b, double progress);
@@ -128,7 +178,7 @@ struct					s_vertex
 };
 
 /*
-**	APP ENVIRONMENT VARIABLES.
+**	APP VARIABLES
 */
 
 struct					s_env
@@ -144,10 +194,11 @@ struct					s_env
 	t_dims				par_inter;
 	t_dims				iso_delta;
 	t_dims				iso_inter;
-	float				iso_rot;
+	int					angle;
+	float				iso_scale;
 	t_dims				color_sets[3];
 	int					color_id;
-	void				(*rdr)(const t_env *env);	
+	void				(*rdr)(const t_env *env);
 };
 
 /*
@@ -162,7 +213,6 @@ int						preparse_data(char *filename, t_env *env);
 */
 
 int						cb_expose(void *param);
-
 int						cb_key(int keycode, void *param);
 
 /*

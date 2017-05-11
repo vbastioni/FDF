@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw_par.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/11 12:14:46 by vbastion          #+#    #+#             */
+/*   Updated: 2017/05/11 12:14:47 by vbastion         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 #include <mlx.h>
 
-/*
 static inline void	render_to(const t_env *env, const t_img *img, t_dir dir,
 								const t_dims pos)
 {
@@ -19,8 +30,6 @@ static inline void	render_to(const t_env *env, const t_img *img, t_dir dir,
 	v[1] = env->vertex[pos.y + (dir > 0)][pos.x + (dir != 1)];
 	c[0] = col_get(v[0], env);
 	c[1] = col_get(v[1], env);
-	printf("For pos[%d, %d], c#0: 0x%x, c#1: 0x%x\n", 
-			pos.x, pos.y, c[0], c[1]);
 	i = 0;
 	while (++i <= (env->par_inter.x))
 	{
@@ -32,7 +41,6 @@ static inline void	render_to(const t_env *env, const t_img *img, t_dir dir,
 									(double)i / (env->par_inter.x + 1));
 	}
 }
-*/
 
 void				draw_par(const t_env *env)
 {
@@ -40,10 +48,6 @@ void				draw_par(const t_env *env)
 	t_img			img;
 	char			*addr;
 
-	printf("Env dims: [%d, %d], delta: [%d, %d], inter: [%d, %d]\n",
-			env->pdims.x, env->pdims.y,
-			env->par_delta.x, env->par_delta.y,
-			env->par_inter.x, env->par_inter.y);
 	img.img = mlx_new_image(env->mlx, WIN_X, WIN_Y);
 	img.addr = mlx_get_data_addr(img.img, &img.bpx, &img.sl, &img.endian);
 	img.bpx /= 8;
@@ -53,21 +57,14 @@ void				draw_par(const t_env *env)
 		pos.x = -1;
 		while (++pos.x < (env->pdims.x))
 		{
-/*
-			*((int *)(img.addr + img.bpx * (pos.x + env->par_inter.x)
-				+ img.sl * (pos.y + env->par_inter.y))) = 
-				(col_get(env->vertex[pos.y][pos.y], env));
-*/
-			addr = (img.addr + img.bpx * (env->par_delta.x 
-											+ pos.x * (env->par_inter.x + 1))
-					+ img.sl * (env->par_delta.y
-								+ pos.x *(env->par_inter.y+ 1)));
-			*((int *)addr) = col_get(env->vertex[pos.y][pos.y], env);
-			/*
+			addr = (img.addr + img.bpx * (env->par_delta.x + pos.x
+											* (env->par_inter.x + 1))
+						+ img.sl * (env->par_delta.y + pos.y
+									* (env->par_inter.y + 1)));
+			*((int *)addr) = col_get(env->vertex[pos.y][pos.x], env);
 			render_to(env, &img, RIG, pos);
 			render_to(env, &img, BOT, pos);
 			render_to(env, &img, DIA, pos);
-			*/
 		}
 	}
 	mlx_put_image_to_window(env->mlx, env->win, img.img, 0, 0);

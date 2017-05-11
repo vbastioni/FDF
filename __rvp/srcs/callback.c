@@ -10,18 +10,35 @@ int						cb_expose(void *param)
 	return(0);
 }
 
-void					change_color(t_env *env)
+static inline void		change_to(t_mode mode, t_env *env)
 {
-	printf("Current color set id: %d\n\tColor#0: 0x%x\n\tColor#1: 0x%x\n",
-			env->color_id,
-			env->color_sets[env->color_id].x,
-			env->color_sets[env->color_id].y);
+	if (env->render_mode == mode)
+		return ;
+	env->render_mode = mode;
+	if (mode == 0)
+		env->rdr = &draw_par;
+	else if (mode == 1)
+		env->rdr = &draw_iso;
+	env->rdr(env);
+}
+
+static inline void		change_color(t_env *env)
+{
 	env->color_id++;
 	if (env->color_id > 2)
-	{
-		printf("Reseting color id.\n");
 		env->color_id = 0;
-	}
+	env->rdr(env);
+}
+
+static inline void		try_turn(t_env *env, int keycode)
+{
+	if (env->render_mode != ISO)
+		return ;
+	env->angle += ANGLE_STEP * (keycode == KC_TURN_LEFT ? -1 : 1);
+	if (env->angle < 0)
+		env->angle += 360;
+	else if (env->angle > 360)
+		env->angle -= 360;
 	env->rdr(env);
 }
 
@@ -30,15 +47,15 @@ int						cb_key(int keycode, void *param)
 	t_env				*env;
 
 	env = (t_env *)param;
-	if (keycode)
-	{
-		ft_putnbr(keycode);
-		ft_putstr("\n");
-		(void)param;
-	}
 	if (keycode == KC_EXIT)
 		exit(0);
-	if (keycode == KC_CHANGE_COLOR)
+	 if (keycode == KC_PAR)
+		change_to(PAR, env);
+	 if (keycode == KC_ISO)
+		change_to(ISO, env);
+	 if (keycode == KC_CHANGE_COLOR)
 		change_color(env);
+	if (keycode == KC_TURN_LEFT || keycode == KC_TURN_RIGHT)
+		try_turn(env, keycode);
 	return (0);
 }

@@ -11,9 +11,11 @@ int  col_get(t_vertex v, const t_env *env)
     pct = (float)(v.pos.z - env->alts.x) / (float)(env->alts.y - env->alts.x);
 	int c = (color_lerp(env->color_sets[env->color_id].x,
 						env->color_sets[env->color_id].y, pct));
+/*
 	printf("For vertex [%d, %d, %d], alts[%d, %d], c: 0x%x\n",
 			v.pos.x, v.pos.y, v.pos.z,
 			env->alts.x, env->alts.y, c);
+*/
     return (c);
 }
 

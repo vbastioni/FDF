@@ -22,14 +22,18 @@ static void		set_par_deltas(t_env *env)
 
 static void		set_iso_deltas(t_env *env)
 {
-	(void)env;
+	float		max;
+
+	max = env->pdims.x < env->pdims.y ? env->pdims.y : env->pdims.x;
+	max = max * cos(ANG * PI / 180.0) * 2;
+	env->iso_scale = WIN_X / max;
 }
 
 void			env_setup(t_env *env)
 {
-	env->iso_rot = 0;
 	env->color_id = 0;
 	env->rdr = NULL;
+	env->angle = 90;
 	env->render_mode = PAR;
 	env->color_sets[0] = dims_create(COL_LOW_1, COL_HIGH_1);
 	env->color_sets[1] = dims_create(COL_LOW_2, COL_HIGH_2);

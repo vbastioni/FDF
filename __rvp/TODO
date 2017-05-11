@@ -1,0 +1,2 @@
+CHECK ../maps/plat.fdf ../maps/pnp_flat.fdf.
+Find window exit callback. And do clean-up on this instead of esc key
