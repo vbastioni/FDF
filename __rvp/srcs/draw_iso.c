@@ -19,13 +19,9 @@ static inline t_fvector get_iso_pos(t_vector pos, const t_env *env)
 				- (pos.y * l_abs(cos(d2r(OPP_ANG))))) * env->iso_scale);
 	tmp.b = (-(-pos.z * Z_COEFF + pos.x * sin(d2r(ANG))
 				+ pos.y * sin(d2r(OPP_ANG))) * env->iso_scale);
-    if (env->angle > 0)
-	{
-		ret.a = tmp.a * cos(PI) + tmp.b * -sin(PI);
-		ret.b = tmp.a * sin(PI) + tmp.b * cos(PI);
-		return (ret);
-	}
-	return (tmp);
+	ret.a = tmp.a * cos(PI) + tmp.b * -sin(PI);
+	ret.b = tmp.a * sin(PI) + tmp.b * cos(PI);
+	return (ret);
 }
 
 static void             render_to(const t_env *env, const t_img *img, 

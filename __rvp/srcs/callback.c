@@ -39,6 +39,7 @@ static inline void		try_turn(t_env *env, int keycode)
 		env->angle += 360;
 	else if (env->angle > 360)
 		env->angle -= 360;
+	printf("Current angle: %d\n", env->angle);
 	env->rdr(env);
 }
 

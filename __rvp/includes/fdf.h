@@ -35,10 +35,10 @@
 # define PI (3.14159265358979323846)
 
 # define Z_COEFF (0.10)
-# define ANG (30)
-# define OPP_ANG (180 - ANG)
+# define ANG (0)
+# define OPP_ANG (ANG + 120)
 # define LINE_PRE 10
-# define ANGLE_STEP 10
+# define ANGLE_STEP 90
 
 /*
 **	COLORS

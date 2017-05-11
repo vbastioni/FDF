@@ -33,7 +33,7 @@ void			env_setup(t_env *env)
 {
 	env->color_id = 0;
 	env->rdr = NULL;
-	env->angle = 90;
+	env->angle = 0;
 	env->render_mode = PAR;
 	env->color_sets[0] = dims_create(COL_LOW_1, COL_HIGH_1);
 	env->color_sets[1] = dims_create(COL_LOW_2, COL_HIGH_2);
