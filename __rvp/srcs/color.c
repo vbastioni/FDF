@@ -4,6 +4,10 @@ int  col_get(t_vertex v, const t_env *env)
 {
     float pct;
     
+	if (env->color_id == 3 && v.color.color != -1)
+		return (v.color.color);
+	if (env->alts.x == env->alts.y)
+		return (env->color_sets[env->color_id].x);
     pct = (float)(v.pos.z - env->alts.x) / (float)(env->alts.y - env->alts.x);
 	int c = (color_lerp(env->color_sets[env->color_id].x,
 						env->color_sets[env->color_id].y, pct));

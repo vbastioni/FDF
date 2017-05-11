@@ -21,8 +21,8 @@
 
 # include "libft.h"
 
-# define WIN_X 1200
-# define WIN_Y 1200
+# define WIN_X 800
+# define WIN_Y 800
 # define WIN_NAME ("FdF")
 
 /*
@@ -35,7 +35,7 @@
 # define PI (3.14159265358979323846)
 
 # define Z_COEFF (0.10)
-# define ANG (0)
+# define ANG (30)
 # define OPP_ANG (ANG + 120)
 # define LINE_PRE 10
 # define ANGLE_STEP 90
@@ -47,10 +47,14 @@
 # define COL_LOW_1 (0xFFFFFF)
 # define COL_LOW_2 (0xFF00FF)
 # define COL_LOW_3 (0x15439B)
+# define COL_LOW_4 (0x9FC627)
 
 # define COL_HIGH_1 (0x0)
 # define COL_HIGH_2 (0xFFFF00)
 # define COL_HIGH_3 (0x9B4815)
+# define COL_HIGH_4 (0xC627A1)
+
+# define COLOR_SET_CNT 4
 
 /*
 **	KEYCODES
@@ -192,11 +196,12 @@ struct					s_env
 	t_mode				render_mode;
 	t_dims				par_delta;
 	t_dims				par_inter;
+	float				zcoeff;
 	t_dims				iso_delta;
 	t_dims				iso_inter;
 	int					angle;
 	float				iso_scale;
-	t_dims				color_sets[3];
+	t_dims				color_sets[4];
 	int					color_id;
 	void				(*rdr)(const t_env *env);
 };

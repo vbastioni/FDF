@@ -25,7 +25,7 @@ static inline void		change_to(t_mode mode, t_env *env)
 static inline void		change_color(t_env *env)
 {
 	env->color_id++;
-	if (env->color_id > 2)
+	if (env->color_id == COLOR_SET_CNT)
 		env->color_id = 0;
 	env->rdr(env);
 }

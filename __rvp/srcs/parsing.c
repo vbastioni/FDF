@@ -88,10 +88,10 @@ int					preparse_data(char *filename, t_env *env)
 	if ((env->pdims.x = count_elem(line)) < 0)
 		return (0);
 	env->pdims.y = 1;
-//	free(line);
+	free(line);
 	while ((gnl = get_next_line(fd, &line)) > 0)
 	{
-		//free(line);
+		free(line);
 		env->pdims.y++;
 	}
 	if (!(env->vertex = (t_vertex **)malloc(sizeof(t_vertex *) * 
