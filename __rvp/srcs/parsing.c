@@ -76,21 +76,22 @@ static int			convert_data(t_env *env, char *line, int y)
 	return (1);
 }
 
-int					preparse_data(const char *filename, t_env *env)
+int					preparse_data(char *filename, t_env *env)
 {
 	int				fd;
 	int				gnl;
 	char			*line;
 
-	if ((fd = open(filename, O_RDONLY) < 0)
+	if ((fd = open(filename, O_RDONLY)) < 0
 		|| (gnl = get_next_line(fd, &line)) < 1)
 		return (0);
-	if ((env->pdims.y = 1) && (env->pdims.x = count_elem(line)) < 0)
+	if ((env->pdims.x = count_elem(line)) < 0)
 		return (0);
-	free(line);
+	env->pdims.y = 1;
+//	free(line);
 	while ((gnl = get_next_line(fd, &line)) > 0)
 	{
-		free(line);
+		//free(line);
 		env->pdims.y++;
 	}
 	if (!(env->vertex = (t_vertex **)malloc(sizeof(t_vertex *) * 
@@ -100,7 +101,7 @@ int					preparse_data(const char *filename, t_env *env)
 	return (1);
 }
 
-int					parse_data(const char *filename, t_env *env)
+int					parse_data(char *filename, t_env *env)
 {
 	int				fd;
 	char			*line;
@@ -108,6 +109,7 @@ int					parse_data(const char *filename, t_env *env)
 	int				gnl;
 
 	y = 0;
+	env->alts = dims_zero();
     if (!(fd = open(filename, O_RDONLY)))
 		return (0);
 	while ((gnl = get_next_line(fd, &line)) > 0 &&
