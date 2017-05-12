@@ -6,3 +6,7 @@ Add error checking in input files and add verbose errors.
 Add offset on either x or y to center representation on screen.
 
 ####
+Add Height coloring.
+Renormalize height
+Add default delta to a certain value
+Add change altitude event

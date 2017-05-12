@@ -21,8 +21,8 @@
 
 # include "libft.h"
 
-# define WIN_X 800
-# define WIN_Y 800
+# define WIN_X 1600
+# define WIN_Y 1600
 # define WIN_NAME ("FdF")
 
 /*

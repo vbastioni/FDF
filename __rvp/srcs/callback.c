@@ -22,6 +22,16 @@ static inline void		change_to(t_mode mode, t_env *env)
 	env->rdr(env);
 }
 
+void					zoom(t_env *env, int keycode)
+{
+	//
+}
+
+void					scale(t_env *env, int keycode)
+{
+	//
+}
+
 static inline void		change_color(t_env *env)
 {
 	env->color_id++;
