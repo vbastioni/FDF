@@ -3,5 +3,6 @@
 CHECK ../maps/plat.fdf ../maps/pnp_flat.fdf. -- DONE
 Find window exit callback. And do clean-up on this instead of esc key
 Add error checking in input files and add verbose errors.
+Add offset on either x or y to center representation on screen.
 
 ####
