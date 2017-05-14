@@ -5,21 +5,36 @@ static inline double    d2r(double deg)
 	return (deg * PI / 180.0);
 }
 
+/*
 static inline double	l_abs(double f)
 {
 	return (f < 0 ? -f : f);
 }
+*/
 
 static inline t_fvector get_iso_pos(t_vector pos, const t_env *env)
 {
 	t_fvector           ret;
-	t_fvector           tmp;
+//	t_fvector           tmp;
+	t_fvector			ang;
 
+	ang = env->iso_angles;
+	ret.a = (cos(d2r(ang.a)) * pos.x)
+				+ sin(d2r(ang.a) * pos.y
+				+ 0 * pos.z);
+	ret.b = (+sin(d2r(ang.a)) * cos(d2r(ang.b))  * pos.x
+				+ cos(d2r(ang.a)) * cos(d2r(ang.b)) * pos.y
+				+ sin(d2r(ang.b)) * ((double)pos.z / (env->alts.y - env->alts.x)
+										* env->zcoeff));
+	ret.a *= env->iso_scale;
+	ret.b *= env->iso_scale;
+/*
 	tmp.a = -((pos.x * l_abs(cos(d2r(ANG)))
 				- (pos.y * l_abs(cos(d2r(OPP_ANG))))) * env->iso_scale);
 	tmp.b = (-pos.z * env->zcoeff + (pos.x + pos.y) * sin(d2r(ANG))) * env->iso_scale;
 	ret.a = WIN_X + tmp.a * cos(PI) - tmp.b * -sin(PI);
 	ret.b = WIN_Y * 0.4 - tmp.a * sin(PI) - tmp.b * cos(PI);
+*/
 	return (ret);
 }
 
@@ -36,6 +51,8 @@ static void             render_to(const t_env *env, const t_img *img,
 	ve[1] = env->vertex[pos.y + (dir > 0)][pos.x + (dir != 1)];
 	v[0] = get_iso_pos(ve[0].pos, env);
 	v[1] = get_iso_pos(ve[1].pos, env);
+	if (v[0].a < 0 || v[0].b < 0 || v[1].a < 0 || v[1].b < 0)
+		return ;
 	c[0] = col_get(ve[0], env);
 	c[1] = col_get(ve[1], env);
 	v[2].a = (v[1].a - v[0].a);

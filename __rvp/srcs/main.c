@@ -2,10 +2,12 @@
 
 #include "fdf.h"
 
+/*
 static inline double	d2r(double d)
 {
 	return (d * PI / 180.0);
 }
+*/
 
 static void		set_par_deltas(t_env *env)
 {
@@ -27,26 +29,10 @@ static void		set_par_deltas(t_env *env)
 
 static void		set_iso_deltas(t_env *env)
 {
-	float		max;
-	int			s;
-	int			z;
-	float		max_h;
-
-	max = env->pdims.x < env->pdims.y ? env->pdims.y : env->pdims.x;
-	s = (env->pdims.x + env->pdims.y);
-	z = (env->alts.y - env->alts.x);
-	env->zcoeff = (s * (cos(d2r(ANG)) - sin(d2r(ANG))) / z);
-	if (env->zcoeff > 1)
-		env->zcoeff = 1.0f;
-	printf("Env->zcoeff: %f\n", env->zcoeff);
-	max = max * cos(ANG * PI / 180.0) * 2;
-	env->iso_scale = (WIN_X / max);
-	max *= env->iso_scale;
-	env->iso_delta.x = ((env->pdims.x < env->pdims.y ? 
-							env->pdims.y : env->pdims.x)
-						* env->iso_scale * cos(ANG * PI / 180.0));
-	max_h = (s * sin(d2r(ANG)) + z * env->zcoeff) * env->iso_scale;
-	env->iso_delta.y = (WIN_Y - max_h) / 2 - env->alts.x;
+	env->zcoeff = 1.;
+	env->iso_scale = 50.;
+	env->iso_inter = (t_dims){10, 10};
+	env->iso_angles = (t_fvector){00, 30};
 }
 
 void			env_setup(t_env *env)

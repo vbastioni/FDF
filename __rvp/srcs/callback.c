@@ -25,11 +25,13 @@ static inline void		change_to(t_mode mode, t_env *env)
 void					zoom(t_env *env, int keycode)
 {
 	//
+	(void)env; (void)keycode;
 }
 
 void					scale(t_env *env, int keycode)
 {
 	//
+	(void)env; (void)keycode;
 }
 
 static inline void		change_color(t_env *env)
@@ -53,6 +55,15 @@ static inline void		try_turn(t_env *env, int keycode)
 	env->rdr(env);
 }
 
+void					scale_up(int dir, t_env *env)
+{
+	if (env->render_mode != ISO)
+		return ;
+	printf("Scaling up?\n");
+	env->zcoeff += dir;
+	env->rdr(env);
+}
+
 int						cb_key(int keycode, void *param)
 {
 	t_env				*env;
@@ -68,5 +79,7 @@ int						cb_key(int keycode, void *param)
 		change_color(env);
 	if (keycode == KC_TURN_LEFT || keycode == KC_TURN_RIGHT)
 		try_turn(env, keycode);
+	if (keycode == KC_PG_DOWN || keycode == KC_PG_UP)
+		scale_up(keycode == KC_PG_UP ? -1 : 1, env);
 	return (0);
 }

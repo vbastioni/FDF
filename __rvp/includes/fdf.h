@@ -66,6 +66,8 @@
 # define KC_CHANGE_COLOR 49
 # define KC_TURN_LEFT 123
 # define KC_TURN_RIGHT 124
+# define KC_PG_UP 116
+# define KC_PG_DOWN 121
 
 /*
 **	APP EVENT
@@ -199,6 +201,7 @@ struct					s_env
 	float				zcoeff;
 	t_dims				iso_delta;
 	t_dims				iso_inter;
+	t_fvector			iso_angles;
 	int					angle;
 	float				iso_scale;
 	t_dims				color_sets[4];
@@ -232,5 +235,7 @@ struct					s_img
 	int					sl;
 	int					endian;
 };
+
+int						err(const char *msg);
 
 #endif

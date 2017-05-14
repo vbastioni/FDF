@@ -60,10 +60,17 @@ static t_vertex		get_vertex(char **line, int x, int y)
 static int			convert_data(t_env *env, char *line, int y)
 {
 	int				x;
+	int				cnt;
 
+	cnt = count_elem(line);
+	if (cnt != env->pdims.x)
+		return (0 * (err("Wrong line #") | err(ft_itoa(y))
+						| err(" element count. Awaited ")
+						| err(ft_itoa(env->pdims.x)) | err(" and got ")
+						| err(ft_itoa(cnt)) | err(" lines.\n")));
 	if (!(env->vertex[y] = (t_vertex *)malloc(
 			sizeof(t_vertex) * env->pdims.x)))
-		return (0);
+		return (0 * err("Could not allocate memory"));
 	x = -1;
 	while (++x < env->pdims.x)
 	{
@@ -84,9 +91,9 @@ int					preparse_data(char *filename, t_env *env)
 
 	if ((fd = open(filename, O_RDONLY)) < 0
 		|| (gnl = get_next_line(fd, &line)) < 1)
-		return (0);
+		return (0 * err("Either could not open or read the file.\n"));
 	if ((env->pdims.x = count_elem(line)) < 0)
-		return (0);
+		return (0 * err("Must have a valid file and data.\n"));
 	env->pdims.y = 1;
 	free(line);
 	while ((gnl = get_next_line(fd, &line)) > 0)
@@ -96,7 +103,7 @@ int					preparse_data(char *filename, t_env *env)
 	}
 	if (!(env->vertex = (t_vertex **)malloc(sizeof(t_vertex *) * 
 											env->pdims.y)))
-		return (0);
+		return (0 * err("Could not allocate memory.\n"));
 	close(fd);
 	return (1);
 }
@@ -107,14 +114,20 @@ int					parse_data(char *filename, t_env *env)
 	char			*line;
 	int				y;
 	int				gnl;
+	int				ret_cd;
 
 	y = 0;
 	env->alts = dims_zero();
     if (!(fd = open(filename, O_RDONLY)))
 		return (0);
 	while ((gnl = get_next_line(fd, &line)) > 0 &&
-			convert_data(env, line, y++))
+			((ret_cd = convert_data(env, line, y++)) > 0))
 		free(line);
+	if (ret_cd == 0)
+	{
+		// FREE already allocated memory
+		return (0);
+	}
 	close(fd);
 	return (1);
 }

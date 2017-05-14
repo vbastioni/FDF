@@ -13,7 +13,16 @@ INCS +=-I $(MLX)
 endif
 SRC_D=./srcs/
 INC_D=./includes/
-ITEM:=$(shell ls ${SRC_D}*.c | sed -E 's/.*\/([0-9A-Za-z_]*\.c)/\1/g')
+# ITEM:=$(shell ls ${SRC_D}*.c | sed -E 's/.*\/([0-9A-Za-z_]*\.c)/\1/g')
+ITEM:=\
+	callback.c\
+	color.c\
+	dims.c\
+	draw_iso.c\
+	draw_par.c\
+	error.c\
+	main.c\
+	parsing.c
 SRC:=$(addprefix $(SRC_D), $(ITEM))
 OBJ:=$(ITEM:.c=.o)
 
@@ -26,6 +35,12 @@ ifeq ("$t", "true")
 endif
 	$(CC) $(CFLAGS) -c $? $(SRC) ${INCS}
 	$(CC) $(OBJ) ${GNL}/get_next_line.o -o $(NAME) -L ${FT}/ -lft  $(LIBS)
+
+debug: $(SRC)
+	@make -C $(FT)
+	@make -C $(GNL)
+	$(CC) -D DEBUG $(CFLAGS) -c $? $(SRC) $(INCS)
+	$(CC) $(OBJ) ${GNL}/get_next_line.o -o $(NAME) -L ${FT}/ -lft $(LIBS)
 
 all: $(NAME)
 
