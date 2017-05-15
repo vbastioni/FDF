@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/15 13:19:22 by vbastion          #+#    #+#             */
+/*   Updated: 2017/05/15 16:46:55 by vbastion         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 #include <fcntl.h>
@@ -57,28 +69,24 @@ static t_vertex		get_vertex(char **line, int x, int y)
 	return (vec);
 }
 
-static int			convert_data(t_env *env, char *line, int y)
+static int			convert_data(t_env *e, char *line, int y)
 {
 	int				x;
 	int				cnt;
 
 	cnt = count_elem(line);
-	if (cnt != env->pdims.x)
-		return (0 * (err("Wrong line #") | err(ft_itoa(y))
-						| err(" element count. Awaited ")
-						| err(ft_itoa(env->pdims.x)) | err(" and got ")
-						| err(ft_itoa(cnt)) | err(" lines.\n")));
-	if (!(env->vertex[y] = (t_vertex *)malloc(
-			sizeof(t_vertex) * env->pdims.x)))
-		return (0 * err("Could not allocate memory"));
+	if (cnt != e->pdims.x)
+		return (0 * (err("Error line #") | err(ft_itoa(y)) | err("\n")));
+	if (!(e->vertex[y] = (t_vertex *)malloc(sizeof(t_vertex) * e->pdims.x)))
+		return (0 * err("Could not allocate memory\n"));
 	x = -1;
-	while (++x < env->pdims.x)
+	while (++x < e->pdims.x)
 	{
-		env->vertex[y][x] = get_vertex(&line, x, y);
-		if (env->vertex[y][x].pos.z > env->alts.y)
-			env->alts.y = env->vertex[y][x].pos.z;
-		else if (env->vertex[y][x].pos.z < env->alts.x)
-			env->alts.x = env->vertex[y][x].pos.z;
+		e->vertex[y][x] = get_vertex(&line, x, y);
+		if (e->vertex[y][x].pos.z > e->alts.y)
+			e->alts.y = e->vertex[y][x].pos.z;
+		else if (e->vertex[y][x].pos.z < e->alts.x)
+			e->alts.x = e->vertex[y][x].pos.z;
 	}
 	return (1);
 }
@@ -101,11 +109,24 @@ int					preparse_data(char *filename, t_env *env)
 		free(line);
 		env->pdims.y++;
 	}
-	if (!(env->vertex = (t_vertex **)malloc(sizeof(t_vertex *) * 
-											env->pdims.y)))
+	if (!(env->vertex = (t_vertex **)malloc(sizeof(t_vertex *) * env->pdims.y)))
 		return (0 * err("Could not allocate memory.\n"));
 	close(fd);
 	return (1);
+}
+
+int					free_lines(t_env *env, int cnt)
+{
+	int				i;
+
+	i = 0;
+	while (i <= cnt)
+	{
+		free(env->vertex[i]);
+		i++;
+	}
+	free(env->vertex);
+	return (0);
 }
 
 int					parse_data(char *filename, t_env *env)
@@ -117,17 +138,14 @@ int					parse_data(char *filename, t_env *env)
 	int				ret_cd;
 
 	y = 0;
-	env->alts = dims_zero();
-    if (!(fd = open(filename, O_RDONLY)))
+	env->alts = (t_dims){0, 0};
+	if (!(fd = open(filename, O_RDONLY)))
 		return (0);
-	while ((gnl = get_next_line(fd, &line)) > 0 &&
-			((ret_cd = convert_data(env, line, y++)) > 0))
+	while ((gnl = get_next_line(fd, &line)) > 0
+			&& ((ret_cd = convert_data(env, line, y++)) > 0))
 		free(line);
 	if (ret_cd == 0)
-	{
-		// FREE already allocated memory
-		return (0);
-	}
+		return (free_lines(env, y - 2));
 	close(fd);
 	return (1);
 }

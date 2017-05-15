@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/11 12:51:29 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/11 12:51:30 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/15 16:48:26 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,11 @@
 
 # include <stdlib.h>
 # include <math.h>
-# include <stdio.h> //
 
 # include "libft.h"
 
-# define WIN_X 800
-# define WIN_Y 800
+# define WIN_X 1200
+# define WIN_Y 1200
 # define WIN_NAME ("FdF")
 
 /*
@@ -34,9 +33,16 @@
 # endif
 # define PI (3.14159265358979323846)
 
-//# define TO_RAD (PI / 180.0)
+/*
+**	# define TO_RAD (PI / 180.0)
+*/
+
 # define TO_RAD (0.01745329251994329577)
-// # define TO_DEG (180.0 / PI)
+
+/*
+**	# define TO_DEG (180.0 / PI)
+*/
+
 # define TO_DEG (57.2957795130823208768)
 
 # define Z_COEFF (0.10)
@@ -44,6 +50,10 @@
 # define OPP_ANG (ANG + 120)
 # define LINE_PRE 10
 # define ANGLE_STEP 90
+# define MOVE_STEP 5
+
+# define DEF_ANG_X 45
+# define DEF_ANG_Y 30
 
 /*
 **	COLORS
@@ -69,13 +79,16 @@
 # define KC_ISO 19
 # define KC_EXIT 53
 # define KC_CHANGE_COLOR 49
-# define KC_TURN_LEFT 123
-# define KC_TURN_RIGHT 124
+# define KC_LEFT 123
+# define KC_RIGHT 124
+# define KC_UP 126
+# define KC_DOWN 125
 # define KC_PG_UP 116
 # define KC_PG_DOWN 121
 
 # define KC_Q 12
 # define KC_E 14
+# define KC_R 15
 
 # define KC_W 13
 # define KC_S 1
@@ -85,12 +98,20 @@
 # define KC_O 31
 # define KC_P 35
 
+# define KEY_PRESS 2
+# define KEY_RELEASE 3
+# define KEY_PRESS_MASK 1L << 0
+# define KEY_RELEASE_MASK 1L << 1
+
 /*
 **	APP EVENT
 */
 
 # define EVT_CLOSE_WIN 11
-// # define DestroyNotify	17
+
+/*
+** # define DestroyNotify	17
+*/
 
 /*
 **	typedefs
@@ -239,6 +260,7 @@ int						preparse_data(char *filename, t_env *env);
 
 int						cb_expose(void *param);
 int						cb_key(int keycode, void *param);
+int						cb_cont_key(int kc, void *param);
 
 /*
 **	Image container
@@ -254,5 +276,6 @@ struct					s_img
 };
 
 int						err(const char *msg);
+int						free_lines(t_env *env, int cnt);
 
 #endif

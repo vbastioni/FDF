@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/11 14:01:03 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/18 11:32:46 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/15 14:56:37 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,9 @@ unsigned int		ft_abs(int n);
 long				ft_atol(char const *str);
 int					ft_countbits(int n);
 int					ft_activebits(int n);
-int				ft_isspace(char c);
-unsigned int			ft_atoibase(const char *nbr, const char *base);
-unsigned int			ft_atoinbase(const char *nbr);
+int					ft_isspace(char c);
+unsigned int		ft_atoibase(const char *nbr, const char *base);
+unsigned int		ft_atoinbase(const char *nbr);
 unsigned int		ft_atoihex(const char *nbr);
 
 #endif

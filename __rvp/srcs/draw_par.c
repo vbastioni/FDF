@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/11 12:14:46 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/11 12:14:47 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/15 17:14:41 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include <mlx.h>
 
-static inline void	render_to(const t_env *env, const t_img *img, t_dir dir,
+static inline int	render_to(const t_env *env, const t_img *img, t_dir dir,
 								const t_dims pos)
 {
 	int				i;
@@ -25,7 +25,7 @@ static inline void	render_to(const t_env *env, const t_img *img, t_dir dir,
 
 	if ((pos.x + (dir != 1)) == env->pdims.x || env->par_inter.x == 0
 		|| (pos.y + (dir > 0)) == env->pdims.y || env->par_inter.y == 0)
-		return ;
+		return (0);
 	v[0] = env->vertex[pos.y][pos.x];
 	v[1] = env->vertex[pos.y + (dir > 0)][pos.x + (dir != 1)];
 	c[0] = col_get(v[0], env);
@@ -40,6 +40,7 @@ static inline void	render_to(const t_env *env, const t_img *img, t_dir dir,
 		*((int *)addr) = color_lerp(c[0], c[1],
 									(double)i / (env->par_inter.x + 1));
 	}
+	return (0);
 }
 
 void				draw_par(const t_env *env)
@@ -62,9 +63,10 @@ void				draw_par(const t_env *env)
 						+ img.sl * (env->par_delta.y + pos.y
 									* (env->par_inter.y + 1)));
 			*((int *)addr) = col_get(env->vertex[pos.y][pos.x], env);
-			render_to(env, &img, RIG, pos);
-			render_to(env, &img, BOT, pos);
-			render_to(env, &img, DIA, pos);
+			(!(pos.x < env->pdims.x) ? render_to(env, &img, RIG, pos) : 0);
+			(!(pos.y < env->pdims.y) ? render_to(env, &img, BOT, pos) : 0);
+			if (pos.x < (env->pdims.x - 1) && pos.y < (env->pdims.y - 1))
+				render_to(env, &img, DIA, pos);
 		}
 	}
 	mlx_put_image_to_window(env->mlx, env->win, img.img, 0, 0);

@@ -1,24 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   color.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/15 13:29:44 by vbastion          #+#    #+#             */
+/*   Updated: 2017/05/15 13:46:18 by vbastion         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
-int  col_get(t_vertex v, const t_env *env)
+int			col_get(t_vertex v, const t_env *env)
 {
-    float pct;
-    
+	float	pct;
+
 	if (env->color_id == 3 && v.color.color != -1)
 		return (v.color.color);
 	if (env->alts.x == env->alts.y)
 		return (env->color_sets[env->color_id].x);
-    pct = (float)(v.pos.z - env->alts.x) / (float)(env->alts.y - env->alts.x);
-	int c = (color_lerp(env->color_sets[env->color_id].x,
+	pct = (float)(v.pos.z - env->alts.x) / (float)(env->alts.y - env->alts.x);
+	return (color_lerp(env->color_sets[env->color_id].x,
 						env->color_sets[env->color_id].y, pct));
-    return (c);
 }
 
-int	color_lerp(int color_from, int color_to, double pct)
+int			color_lerp(int color_from, int color_to, double pct)
 {
-	t_color f;
-	t_color t;
-	t_color r;
+	t_color	f;
+	t_color	t;
+	t_color	r;
 
 	f.color = color_from;
 	t.color = color_to;

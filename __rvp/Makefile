@@ -17,7 +17,6 @@ INC_D=./includes/
 ITEM:=\
 	callback.c\
 	color.c\
-	dims.c\
 	draw_iso.c\
 	draw_par.c\
 	error.c\

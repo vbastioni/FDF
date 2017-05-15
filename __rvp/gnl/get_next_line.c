@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 14:55:37 by vbastion          #+#    #+#             */
-/*   Updated: 2017/04/21 14:36:30 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/15 15:06:27 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,3 @@ int					get_next_line(const int fd, char **line)
 	handle_data(tmp, b_sz, t, line);
 	return (ft_strlen(*line) > 0);
 }
-

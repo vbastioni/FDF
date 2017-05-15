@@ -1,22 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/15 14:44:30 by vbastion          #+#    #+#             */
+/*   Updated: 2017/05/15 16:47:56 by vbastion         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <mlx.h>
 
 #include "fdf.h"
 
-/*
-static inline double	d2r(double d)
-{
-	return (d * PI / 180.0);
-}
-*/
-
 static void		set_par_deltas(t_env *env)
 {
 	t_dims		d;
+	t_dims		max;
 
+	max.x = ((env->pdims.x - 1) != 0) ? env->pdims.x - 1 : 1;
+	max.y = ((env->pdims.y - 1) != 0) ? env->pdims.y - 1 : 1;
 	d.x = (WIN_X - env->pdims.x);
 	d.y = (WIN_Y - env->pdims.y);
-	env->par_inter.x = (d.x / (env->pdims.x - 1));
-	env->par_inter.y = (d.y / (env->pdims.y - 1));
+	env->par_inter.x = (d.x / max.x);
+	env->par_inter.y = (d.y / max.y);
 	if (env->par_inter.x > env->par_inter.y)
 		env->par_inter.x = env->par_inter.y;
 	if (env->par_inter.x < env->par_inter.y)
@@ -32,7 +40,7 @@ static void		set_iso_deltas(t_env *env)
 	env->zcoeff = 1.;
 	env->iso_scale = 50.;
 	env->iso_inter = (t_dims){10, 10};
-	env->iso_angles = (t_fvector){00, 30};
+	env->iso_angles = (t_fvector){DEF_ANG_X, DEF_ANG_Y};
 }
 
 void			env_setup(t_env *env)
@@ -41,10 +49,10 @@ void			env_setup(t_env *env)
 	env->rdr = NULL;
 	env->angle = 0;
 	env->render_mode = PAR;
-	env->color_sets[0] = dims_create(COL_LOW_1, COL_HIGH_1);
-	env->color_sets[1] = dims_create(COL_LOW_2, COL_HIGH_2);
-	env->color_sets[2] = dims_create(COL_LOW_3, COL_HIGH_3);
-	env->color_sets[3] = dims_create(COL_LOW_4, COL_HIGH_4);
+	env->color_sets[0] = (t_dims){COL_LOW_1, COL_HIGH_1};
+	env->color_sets[1] = (t_dims){COL_LOW_2, COL_HIGH_2};
+	env->color_sets[2] = (t_dims){COL_LOW_3, COL_HIGH_3};
+	env->color_sets[3] = (t_dims){COL_LOW_4, COL_HIGH_4};
 	env->mlx = mlx_init();
 	env->win = mlx_new_window(env->mlx, WIN_X, WIN_Y, WIN_NAME);
 	set_par_deltas(env);
@@ -66,6 +74,7 @@ int				main(int ac, char **av)
 	env.rdr(&env);
 	mlx_expose_hook(env.win, &cb_expose, &env);
 	mlx_key_hook(env.win, &cb_key, &env);
+	mlx_hook(env.win, KEY_PRESS, KEY_PRESS_MASK, &cb_cont_key, &env);
 	mlx_loop(env.mlx);
-	return (0);
+	return (free_lines(&env, env.pdims.y));
 }
