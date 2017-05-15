@@ -21,8 +21,8 @@
 
 # include "libft.h"
 
-# define WIN_X 1600
-# define WIN_Y 1600
+# define WIN_X 800
+# define WIN_Y 800
 # define WIN_NAME ("FdF")
 
 /*
@@ -33,6 +33,11 @@
 #  undef PI
 # endif
 # define PI (3.14159265358979323846)
+
+//# define TO_RAD (PI / 180.0)
+# define TO_RAD (0.01745329251994329577)
+// # define TO_DEG (180.0 / PI)
+# define TO_DEG (57.2957795130823208768)
 
 # define Z_COEFF (0.10)
 # define ANG (30)
@@ -69,11 +74,23 @@
 # define KC_PG_UP 116
 # define KC_PG_DOWN 121
 
+# define KC_Q 12
+# define KC_E 14
+
+# define KC_W 13
+# define KC_S 1
+# define KC_A 0
+# define KC_D 2
+
+# define KC_O 31
+# define KC_P 35
+
 /*
 **	APP EVENT
 */
 
 # define EVT_CLOSE_WIN 11
+// # define DestroyNotify	17
 
 /*
 **	typedefs

@@ -1,41 +1,32 @@
 #include "fdf.h"
 
-static inline double    d2r(double deg)
-{
-	return (deg * PI / 180.0);
-}
-
-/*
-static inline double	l_abs(double f)
-{
-	return (f < 0 ? -f : f);
-}
-*/
-
 static inline t_fvector get_iso_pos(t_vector pos, const t_env *env)
 {
 	t_fvector           ret;
-//	t_fvector           tmp;
 	t_fvector			ang;
 
 	ang = env->iso_angles;
-	ret.a = (cos(d2r(ang.a)) * pos.x)
-				+ sin(d2r(ang.a) * pos.y
+	ret.a = (cos(ang.a * TO_RAD) * pos.x)
+				+ sin(ang.a * TO_RAD * pos.y
 				+ 0 * pos.z);
-	ret.b = (+sin(d2r(ang.a)) * cos(d2r(ang.b))  * pos.x
-				+ cos(d2r(ang.a)) * cos(d2r(ang.b)) * pos.y
-				+ sin(d2r(ang.b)) * ((double)pos.z / (env->alts.y - env->alts.x)
+	ret.b = (+sin(ang.a * TO_RAD) * cos(ang.b * TO_RAD)  * pos.x
+				+ cos(ang.a * TO_RAD) * cos(ang.b * TO_RAD) * pos.y
+				+ sin(ang.b * TO_RAD) * ((double)pos.z / (env->alts.y - env->alts.x)
 										* env->zcoeff));
 	ret.a *= env->iso_scale;
 	ret.b *= env->iso_scale;
-/*
-	tmp.a = -((pos.x * l_abs(cos(d2r(ANG)))
-				- (pos.y * l_abs(cos(d2r(OPP_ANG))))) * env->iso_scale);
-	tmp.b = (-pos.z * env->zcoeff + (pos.x + pos.y) * sin(d2r(ANG))) * env->iso_scale;
-	ret.a = WIN_X + tmp.a * cos(PI) - tmp.b * -sin(PI);
-	ret.b = WIN_Y * 0.4 - tmp.a * sin(PI) - tmp.b * cos(PI);
-*/
 	return (ret);
+}
+
+static inline int		otter_range(t_fvector *a, t_fvector *b)
+{
+	return ((a->a < 0  && b->a < 0) || (a->b < 0 && b->b < 0) ||
+		(a->a > WIN_X && b->a > WIN_X) || (a->b > WIN_Y && b->b > WIN_Y));
+}
+
+static inline int		in_window(t_fvector *pos)
+{
+	return (!(pos->a < 0 || pos->a > WIN_X || pos->b < 0 || pos->b > WIN_Y));
 }
 
 static void             render_to(const t_env *env, const t_img *img, 
@@ -51,7 +42,7 @@ static void             render_to(const t_env *env, const t_img *img,
 	ve[1] = env->vertex[pos.y + (dir > 0)][pos.x + (dir != 1)];
 	v[0] = get_iso_pos(ve[0].pos, env);
 	v[1] = get_iso_pos(ve[1].pos, env);
-	if (v[0].a < 0 || v[0].b < 0 || v[1].a < 0 || v[1].b < 0)
+	if (otter_range(v, v + 1))
 		return ;
 	c[0] = col_get(ve[0], env);
 	c[1] = col_get(ve[1], env);
@@ -64,6 +55,8 @@ static void             render_to(const t_env *env, const t_img *img,
 		progress = (c[3] / (float)c[2]);
 		v[3].a = (v[0].a + v[2].a * progress);
 		v[3].b = (v[0].b + v[2].b * progress);
+		if (!in_window(v + 3))
+			continue ;
 		addr = (img->addr + ((int)(v[3].a + 0.5 + env->iso_delta.x)) * img->bpx
 				+ ((int)(v[3].b + 0.5) - env->iso_delta.y) * img->sl);
 		*((int *)addr) = color_lerp(c[0], c[1], progress);

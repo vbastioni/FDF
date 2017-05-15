@@ -51,7 +51,6 @@ static inline void		try_turn(t_env *env, int keycode)
 		env->angle += 360;
 	else if (env->angle > 360)
 		env->angle -= 360;
-	printf("Current angle: %d\n", env->angle);
 	env->rdr(env);
 }
 
@@ -59,27 +58,40 @@ void					scale_up(int dir, t_env *env)
 {
 	if (env->render_mode != ISO)
 		return ;
-	printf("Scaling up?\n");
 	env->zcoeff += dir;
 	env->rdr(env);
 }
 
-int						cb_key(int keycode, void *param)
+int						up_scale(int val, t_env *env)
+{
+	if (env->render_mode != ISO)
+		return (1);
+	env->iso_scale += val;
+	env->rdr(env);
+	return (0);
+}
+
+int						cb_key(int kc, void *param)
 {
 	t_env				*env;
 
 	env = (t_env *)param;
-	if (keycode == KC_EXIT)
+	if (kc == KC_EXIT)
 		exit(0);
-	 if (keycode == KC_PAR)
+	 if (kc == KC_PAR)
 		change_to(PAR, env);
-	 if (keycode == KC_ISO)
+	 if (kc == KC_ISO)
 		change_to(ISO, env);
-	 if (keycode == KC_CHANGE_COLOR)
+	 if (kc == KC_CHANGE_COLOR)
 		change_color(env);
-	if (keycode == KC_TURN_LEFT || keycode == KC_TURN_RIGHT)
-		try_turn(env, keycode);
-	if (keycode == KC_PG_DOWN || keycode == KC_PG_UP)
-		scale_up(keycode == KC_PG_UP ? -1 : 1, env);
+	if (kc == KC_TURN_LEFT || kc == KC_TURN_RIGHT)
+		try_turn(env, kc);
+	if (kc == KC_PG_DOWN || kc == KC_PG_UP || kc == KC_Q || kc == KC_E)
+		scale_up((kc == KC_PG_UP || kc == KC_E) ? -1 : 1, env);
+	if (kc == KC_O || kc == KC_P)
+		up_scale(kc == KC_P ? 1 : -1, env);
+	// handle movement
+	// Keys added. Need handling.
+	// Like in fractol.
 	return (0);
 }
