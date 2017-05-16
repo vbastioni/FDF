@@ -32,9 +32,9 @@ OBJ=$(SRC:.c=.o)
 
 $(NAME): $(SRC)
 	@echo "Compiling $(NAME)"
-	@$(CC) $(CFLAGS) -c $? $(SRC)
-	@ar rc $(NAME) $(OBJ)
-	@ranlib $(NAME)
+	$(CC) $(CFLAGS) -c $? $(SRC)
+	ar rc $(NAME) $(OBJ)
+	ranlib $(NAME)
 
 all: $(NAME)
 

@@ -18,7 +18,7 @@
 #include "get_next_line.h"
 #include "libft.h"
 
-static inline int	count_elem(const char *str)
+static int			count_elem(const char *str)
 {
 	char			flags;
 	int				cnt;
@@ -113,20 +113,6 @@ int					preparse_data(char *filename, t_env *env)
 		return (0 * err("Could not allocate memory.\n"));
 	close(fd);
 	return (1);
-}
-
-int					free_lines(t_env *env, int cnt)
-{
-	int				i;
-
-	i = 0;
-	while (i <= cnt)
-	{
-		free(env->vertex[i]);
-		i++;
-	}
-	free(env->vertex);
-	return (0);
 }
 
 int					parse_data(char *filename, t_env *env)

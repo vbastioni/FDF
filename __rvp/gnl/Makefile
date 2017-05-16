@@ -1,15 +1,17 @@
+NAME=gnl
 CC=gcc
-CFLAGS=-Wall -Werror -Wextra -c
+CFLAGS=-Wall -Werror -Wextra
 SRC=get_next_line.c
 OBJ=$(SRC:.c=.o)
 NAME=get_next_line
 
-all:
-	@echo "Compiling $(NAME)"
-	@$(CC) $(CFLAGS) $(SRC) -I../libft
+
+$(NAME): $(SRC)
+	$(CC) $(CFLAGS) -c $? $(SRC) -I../libft
+
+all: $(NAME)
 
 clean:
-	@echo "Cleaning $(NAME)"
-	@/bin/rm -f $(OBJ)
+	/bin/rm -f $(OBJ)
 
 fclean: clean

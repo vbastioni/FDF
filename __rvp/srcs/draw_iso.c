@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-static inline t_fvector	get_iso_pos(t_vector *pos, const t_env *env)
+t_fvector				get_iso_pos(t_vector *pos, const t_env *env)
 {
 	t_fvector			ret;
 	t_fvector			ang;
@@ -37,47 +37,52 @@ static inline int		outer_range(t_fvector *a, t_fvector *b)
 			|| (a->b > WIN_Y && b->b > WIN_Y));
 }
 
-static inline int		in_window(t_fvector *pos)
+static void				draw_from_to(const t_env *env, const t_img *img,
+										t_fvector *vecs, t_vertex *verts)
 {
-	return (!(pos->a < 0 || pos->a > WIN_X || pos->b < 0 || pos->b > WIN_Y));
+	int					colors[2];
+	int					iter;
+	int					i;
+	float				progress;
+	char				*addr;
+
+	colors[0] = col_get(verts[0], env);
+	colors[1] = col_get(verts[1], env);
+	vecs[2].a = (vecs[1].a - vecs[0].a);
+	vecs[2].b = (vecs[1].b - vecs[0].b);
+	iter = (int)(sqrt(vecs[2].a * vecs[2].a + vecs[2].b * vecs[2].b) + 0.5);
+	i = -1;
+	while (++i < iter)
+	{
+		progress = (i / (float)iter);
+		vecs[3].a = (vecs[0].a + vecs[2].a * progress);
+		vecs[3].b = (vecs[0].b + vecs[2].b * progress);
+		if ((vecs + 3)->a < 0 || (vecs + 3)->a > (WIN_X - 2)
+			|| (vecs + 3)->b < 0 || (vecs + 3)->b > (WIN_Y - 2))
+			continue ;
+		addr = (img->addr + ((int)(vecs[3].a + 0.5)) * img->bpx
+				+ ((int)(vecs[3].b + 0.5)) * img->sl);
+		*((int *)addr) = color_lerp(colors[0], colors[1], progress);
+	}
 }
 
 static void				render_to(const t_env *env, const t_img *img,
 									const t_dir dir, const t_dims pos)
 {
 	t_fvector			v[4];
-	int					c[4];
 	t_vertex			ve[2];
-	float				progress;
-	char				*addr;
 
 	ve[0] = env->vertex[pos.y][pos.x];
 	ve[1] = env->vertex[pos.y + (dir > 0)][pos.x + (dir != 1)];
 	v[0] = get_iso_pos(&ve->pos, env);
-	v[0].a += env->iso_delta.x + WIN_X / 2;
-	v[0].b += env->iso_delta.y + WIN_Y / 2;
+	v[0].a += WIN_X / 2 - env->iso_d.x + env->iso_offset.x;
+	v[0].b += WIN_Y / 2 - env->iso_d.y + env->iso_offset.y;
 	v[1] = get_iso_pos(&((ve + 1)->pos), env);
-	v[1].a += env->iso_delta.x + WIN_X / 2;
-	v[1].b += env->iso_delta.y + WIN_Y / 2;
+	v[1].a += WIN_X / 2 - env->iso_d.x + env->iso_offset.x;
+	v[1].b += WIN_Y / 2 - env->iso_d.y + env->iso_offset.y;
 	if (outer_range(v, v + 1))
 		return ;
-	c[0] = col_get(ve[0], env);
-	c[1] = col_get(ve[1], env);
-	v[2].a = (v[1].a - v[0].a);
-	v[2].b = (v[1].b - v[0].b);
-	c[2] = (int)(sqrt(v[2].a * v[2].a + v[2].b * v[2].b) * LINE_PRE + 0.5);
-	c[3] = -1;
-	while (++c[3] < c[2])
-	{
-		progress = (c[3] / (float)c[2]);
-		v[3].a = (v[0].a + v[2].a * progress);
-		v[3].b = (v[0].b + v[2].b * progress);
-		if (!in_window(v + 3))
-			continue ;
-		addr = (img->addr + ((int)(v[3].a + 0.5)) * img->bpx
-				+ ((int)(v[3].b + 0.5)) * img->sl);
-		*((int *)addr) = color_lerp(c[0], c[1], progress);
-	}
+	draw_from_to(env, img, v, ve);
 }
 
 void					draw_iso(const t_env *env)
@@ -86,6 +91,7 @@ void					draw_iso(const t_env *env)
 	t_img				img;
 	t_dims				max_l;
 
+	set_env_iso_delta((t_env *)env);
 	max_l = (t_dims){env->pdims.x - 1, env->pdims.y - 1};
 	img.img = mlx_new_image(env->mlx, WIN_X, WIN_Y);
 	img.addr = mlx_get_data_addr(img.img, &img.bpx, &img.sl, &img.endian);

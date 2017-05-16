@@ -16,8 +16,10 @@ INC_D=./includes/
 # ITEM:=$(shell ls ${SRC_D}*.c | sed -E 's/.*\/([0-9A-Za-z_]*\.c)/\1/g')
 ITEM:=\
 	callback.c\
+	callback_p2.c\
 	color.c\
 	draw_iso.c\
+	draw_iso_p2.c\
 	draw_par.c\
 	error.c\
 	main.c\

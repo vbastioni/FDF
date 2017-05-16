@@ -14,7 +14,7 @@
 
 #include <mlx.h>
 
-static inline int	render_to(const t_env *env, const t_img *img, t_dir dir,
+static inline int	render_to(const t_env *e, const t_img *img, t_dir dir,
 								const t_dims pos)
 {
 	int				i;
@@ -23,52 +23,51 @@ static inline int	render_to(const t_env *env, const t_img *img, t_dir dir,
 	int				de;
 	char			*addr;
 
-	if ((pos.x + (dir != 1)) == env->pdims.x || env->par_inter.x == 0
-		|| (pos.y + (dir > 0)) == env->pdims.y || env->par_inter.y == 0)
+	if ((pos.x + (dir != 1)) == e->pdims.x || e->par_inter.x == 0
+		|| (pos.y + (dir > 0)) == e->pdims.y || e->par_inter.y == 0)
 		return (0);
-	v[0] = env->vertex[pos.y][pos.x];
-	v[1] = env->vertex[pos.y + (dir > 0)][pos.x + (dir != 1)];
-	c[0] = col_get(v[0], env);
-	c[1] = col_get(v[1], env);
+	v[0] = e->vertex[pos.y][pos.x];
+	v[1] = e->vertex[pos.y + (dir > 0)][pos.x + (dir != 1)];
+	c[0] = col_get(v[0], e);
+	c[1] = col_get(v[1], e);
 	i = 0;
-	while (++i <= (env->par_inter.x))
+	while (++i <= (e->par_inter.x))
 	{
-		de = ((pos.x * (env->par_inter.x + 1) + (i * (dir != 1))) * img->bpx
-				+ (pos.y * (env->par_inter.y + 1) + (i * (dir > 0))) * img->sl)
-				+ env->par_delta.x * img->bpx + env->par_delta.y * img->sl;
+		de = ((pos.x * (e->par_inter.x + 1) + (i * (dir != 1))) * img->bpx
+				+ (pos.y * (e->par_inter.y + 1) + (i * (dir > 0))) * img->sl)
+				+ e->par_d.x * img->bpx + e->par_d.y * img->sl;
 		addr = img->addr + de;
 		*((int *)addr) = color_lerp(c[0], c[1],
-									(double)i / (env->par_inter.x + 1));
+									(double)i / (e->par_inter.x + 1));
 	}
 	return (0);
 }
 
-void				draw_par(const t_env *env)
+void				draw_par(const t_env *e)
 {
 	t_dims			pos;
 	t_img			img;
 	char			*addr;
 
-	img.img = mlx_new_image(env->mlx, WIN_X, WIN_Y);
+	img.img = mlx_new_image(e->mlx, WIN_X, WIN_Y);
 	img.addr = mlx_get_data_addr(img.img, &img.bpx, &img.sl, &img.endian);
 	img.bpx /= 8;
 	pos.y = -1;
-	while (++pos.y < (env->pdims.y))
+	while (++pos.y < (e->pdims.y))
 	{
 		pos.x = -1;
-		while (++pos.x < (env->pdims.x))
+		while (++pos.x < (e->pdims.x))
 		{
-			addr = (img.addr + img.bpx * (env->par_delta.x + pos.x
-											* (env->par_inter.x + 1))
-						+ img.sl * (env->par_delta.y + pos.y
-									* (env->par_inter.y + 1)));
-			*((int *)addr) = col_get(env->vertex[pos.y][pos.x], env);
-			(!(pos.x < env->pdims.x) ? render_to(env, &img, RIG, pos) : 0);
-			(!(pos.y < env->pdims.y) ? render_to(env, &img, BOT, pos) : 0);
-			if (pos.x < (env->pdims.x - 1) && pos.y < (env->pdims.y - 1))
-				render_to(env, &img, DIA, pos);
+			addr = (img.addr + img.bpx * (e->par_d.x + pos.x
+											* (e->par_inter.x + 1))
+						+ img.sl * (e->par_d.y + pos.y * (e->par_inter.y + 1)));
+			*((int *)addr) = col_get(e->vertex[pos.y][pos.x], e);
+			(!(pos.x < e->pdims.x) ? render_to(e, &img, RIG, pos) : 0);
+			(!(pos.y < e->pdims.y) ? render_to(e, &img, BOT, pos) : 0);
+			if (pos.x < (e->pdims.x - 1) && pos.y < (e->pdims.y - 1))
+				render_to(e, &img, DIA, pos);
 		}
 	}
-	mlx_put_image_to_window(env->mlx, env->win, img.img, 0, 0);
-	mlx_destroy_image(env->mlx, img.img);
+	mlx_put_image_to_window(e->mlx, e->win, img.img, 0, 0);
+	mlx_destroy_image(e->mlx, img.img);
 }

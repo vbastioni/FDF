@@ -18,6 +18,8 @@
 # include <stdlib.h>
 # include <math.h>
 
+# include <stdio.h>
+
 # include "libft.h"
 
 # define WIN_X 1200
@@ -48,7 +50,6 @@
 # define Z_COEFF (0.10)
 # define ANG (30)
 # define OPP_ANG (ANG + 120)
-# define LINE_PRE 10
 # define ANGLE_STEP 90
 # define MOVE_STEP 5
 
@@ -133,6 +134,23 @@ typedef struct s_env	t_env;
 typedef union u_color	t_color;
 
 /*
+**	SPECIALIZED DATA CONTAINERS
+*/
+
+struct					s_vector
+{
+	int					x;
+	int					y;
+	int					z;
+};
+
+typedef struct			s_fvector
+{
+	float				a;
+	float				b;
+}						t_fvector;
+
+/*
 **	DRAW
 */
 
@@ -151,6 +169,8 @@ enum					e_dir
 
 void					draw_par(const t_env *env);
 void					draw_iso(const t_env *env);
+t_fvector				get_iso_pos(t_vector *pos, const t_env *env);
+void					set_env_iso_delta(t_env *e);
 
 /*
 ** DIMS
@@ -186,23 +206,6 @@ t_t2					*t2_create(void *item1, void *item2);
 t_t3					*t3_create(void *i1, void *i2, void *i3);
 
 /*
-**	SPECIALIZED DATA CONTAINERS
-*/
-
-struct					s_vector
-{
-	int					x;
-	int					y;
-	int					z;
-};
-
-typedef struct			s_fvector
-{
-	float				a;
-	float				b;
-}						t_fvector;
-
-/*
 **	COLOR
 */
 
@@ -220,6 +223,20 @@ struct					s_vertex
 	t_vector			pos;
 	t_color				color;
 };
+/*
+**	Image container
+*/
+
+struct					s_img
+{
+	void				*img;
+	char				*addr;
+	int					bpx;
+	int					sl;
+	int					endian;
+};
+
+t_img					*img_create(const t_env *env, t_mode mode);
 
 /*
 **	APP VARIABLES
@@ -232,17 +249,18 @@ struct					s_env
 	t_vertex			**vertex;
 	t_dims				pdims;
 	t_dims				alts;
-	t_dims				bounds[4];
 	t_mode				render_mode;
-	t_dims				par_delta;
+	t_dims				par_d;
 	t_dims				par_inter;
 	float				zcoeff;
-	t_dims				iso_delta;
+	t_dims				iso_d;
+	t_dims				iso_offset;
 	t_dims				iso_inter;
 	t_fvector			iso_angles;
-	int					angle;
 	float				iso_scale;
-	t_dims				color_sets[4];
+	t_dims				color_sets[5];
+	int					color_set_id;
+	int					color_set_cnt;
 	int					color_id;
 	void				(*rdr)(const t_env *env);
 };
@@ -259,21 +277,11 @@ int						preparse_data(char *filename, t_env *env);
 */
 
 int						cb_expose(void *param);
+void					change_render(t_mode mode, t_env *env);
+void					change_color(t_env *env);
+int						reset_view(void *param);
 int						cb_key(int keycode, void *param);
 int						cb_cont_key(int kc, void *param);
-
-/*
-**	Image container
-*/
-
-struct					s_img
-{
-	void				*img;
-	char				*addr;
-	int					bpx;
-	int					sl;
-	int					endian;
-};
 
 int						err(const char *msg);
 int						free_lines(t_env *env, int cnt);
