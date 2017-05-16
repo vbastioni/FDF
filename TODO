@@ -4,6 +4,6 @@ Add error checking in input files and add verbose errors. -- DONE
 Add offset on either x or y to center representation on screen. -- DONE
 Add Height coloring. -- DONE
 Renormalize height -- DONE
-Add default delta to a certain value - TBD
+Add default delta and scale to a certain value - DONE
 Clean up on quit or on error. -- DONE
 Add change altitude event -- DONE
