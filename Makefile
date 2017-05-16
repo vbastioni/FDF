@@ -1,66 +1,62 @@
 NAME=fdf
-
-LIB=gl.a
+LIB=fdf.a
 CC=gcc
 CFLAGS=-Wall -Wextra -Werror
-LIBS=-lmlx -framework OpenGL -framework AppKit
-MLX=minilibx_macos
 GNL=./gnl
 FT=./libft
+LIBS=-lmlx -framework OpenGL -framework AppKit
+INCS=-I ${INC_D} -I ${GNL} -I ${FT}
+MLX=minilibx_macos
 ifeq ("$t", "true")
-LIBS +=-L $(MLX) -l mlx -I $(MLX)
+LIBS +=-L $(MLX)
+INCS +=-I $(MLX)
 endif
 SRC_D=./srcs/
 INC_D=./includes/
+# ITEM:=$(shell ls ${SRC_D}*.c | sed -E 's/.*\/([0-9A-Za-z_]*\.c)/\1/g')
 ITEM:=\
-    board.c\
-    callback.c\
-    color.c\
-    data.c\
-    dims.c\
-    displays.c\
-    img_data.c\
-    main.c\
-	math_utils.c\
-    parsing.c\
-    pixel.c\
-	renderer.c\
-    utils.c\
-    vertice.c\
-	worker.c
+	callback.c\
+	callback_p2.c\
+	color.c\
+	draw_iso.c\
+	draw_iso_p2.c\
+	draw_par.c\
+	error.c\
+	main.c\
+	parsing.c
 SRC:=$(addprefix $(SRC_D), $(ITEM))
 OBJ:=$(ITEM:.c=.o)
 
-$(NAME):
-	@echo "Compiling for $(NAME)"
-	@make -C $(FT)/
-	@make -C $(GNL)/
-	@echo "Compiling $(NAME)"
+$(NAME): $(SRC)
+	@make -C $(FT)
+	@make -C $(GNL)
 ifeq ("$t", "true")
-	@tar -xf varz/minilibx_macos_20151105.tgz
+	@tar -xf ./minilibx_macos_20151105.tgz
 	@make -C $(MLX)
 endif
-	@$(CC) $(SRC) $(CFLAGS) $(LIBS) $(GNL)/get_next_line.o -o $(NAME) -Llibft/ -Ilibft -lft -I $(INC_D)
-	@echo "$(NAME) is ready!"
+	$(CC) $(CFLAGS) -c $? $(SRC) ${INCS}
+	$(CC) $(OBJ) ${GNL}/get_next_line.o -o $(NAME) -L ${FT}/ -lft  $(LIBS)
+
+debug: $(SRC)
+	@make -C $(FT)
+	@make -C $(GNL)
+	$(CC) -D DEBUG $(CFLAGS) -c $? $(SRC) $(INCS)
+	$(CC) $(OBJ) ${GNL}/get_next_line.o -o $(NAME) -L ${FT}/ -lft $(LIBS)
 
 all: $(NAME)
 
 clean:
-	@echo "Cleaning objects for $(NAME)"
-	@make -C $(FT)/ clean
-	@make -C $(GNL)/ clean
-	@echo "Cleaning objects of $(NAME)"
-	@rm -f $(OBJ)
+	rm -f $(OBJ)
 
 fclean: clean
-	@echo "Cleaning for $(NAME)"
-	@make -C $(FT)/ fclean
-	@make -C $(GNL)/ fclean
-	@echo "Cleaning $(NAME)"
-	@rm -f $(LIB)
-	@rm -f $(NAME)
-ifeq ("$t", "true")
-	@rm -rf $(MLX)
-endif
+	rm -f $(NAME)
 
 re: fclean all
+
+mrproper: fclean
+	@printf "\e[31mCleaning Minilibx.\e[30;0m\n"
+	@rm -rf $(MLX)
+	@printf "\e[31mCleaning GNL.\e[30;0m\n"
+	@make -C ${GNL} fclean
+	@printf "\e[31mCleaning Libft.\e[30;0m\n"
+	@make -C ${FT} fclean

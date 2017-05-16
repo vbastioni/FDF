@@ -23,9 +23,6 @@ static inline int	render_to(const t_env *e, const t_img *img, t_dir dir,
 	int				de;
 	char			*addr;
 
-	if ((pos.x + (dir != 1)) == e->pdims.x || e->par_inter.x == 0
-		|| (pos.y + (dir > 0)) == e->pdims.y || e->par_inter.y == 0)
-		return (0);
 	v[0] = e->vertex[pos.y][pos.x];
 	v[1] = e->vertex[pos.y + (dir > 0)][pos.x + (dir != 1)];
 	c[0] = col_get(v[0], e);
@@ -62,8 +59,8 @@ void				draw_par(const t_env *e)
 											* (e->par_inter.x + 1))
 						+ img.sl * (e->par_d.y + pos.y * (e->par_inter.y + 1)));
 			*((int *)addr) = col_get(e->vertex[pos.y][pos.x], e);
-			(!(pos.x < e->pdims.x) ? render_to(e, &img, RIG, pos) : 0);
-			(!(pos.y < e->pdims.y) ? render_to(e, &img, BOT, pos) : 0);
+			((pos.x < (e->pdims.x - 1)) ? render_to(e, &img, RIG, pos) : 0);
+			((pos.y < (e->pdims.y - 1)) ? render_to(e, &img, BOT, pos) : 0);
 			if (pos.x < (e->pdims.x - 1) && pos.y < (e->pdims.y - 1))
 				render_to(e, &img, DIA, pos);
 		}
