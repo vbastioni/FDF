@@ -34,27 +34,18 @@
 #  undef PI
 # endif
 # define PI (3.14159265358979323846)
-
-/*
-**	# define TO_RAD (PI / 180.0)
-*/
-
 # define TO_RAD (0.01745329251994329577)
-
-/*
-**	# define TO_DEG (180.0 / PI)
-*/
-
 # define TO_DEG (57.2957795130823208768)
 
 # define Z_COEFF (0.10)
 # define ANG (30)
 # define OPP_ANG (ANG + 120)
-# define ANGLE_STEP 90
-# define MOVE_STEP 5
+# define ANGLE_STEP (90)
+# define MOVE_STEP (5)
 
-# define DEF_ANG_X 45
-# define DEF_ANG_Y 30
+# define DEF_ZOOM (50.)
+# define DEF_ANG_X (45)
+# define DEF_ANG_Y (30)
 
 /*
 **	COLORS
@@ -70,7 +61,7 @@
 # define COL_HIGH_3 (0x9B4815)
 # define COL_HIGH_4 (0xC627A1)
 
-# define COLOR_SET_CNT 4
+# define COLOR_SET_CNT (4)
 
 /*
 **	KEYCODES

@@ -65,7 +65,7 @@ int						reset_view(void *param)
 	env = (t_env *)param;
 	env->iso_angles.a = DEF_ANG_X;
 	env->iso_angles.b = DEF_ANG_Y;
-	env->iso_scale = 0.0f;
+	env->iso_scale = DEF_ZOOM;
 	env->rdr(env);
 	return (0);
 }

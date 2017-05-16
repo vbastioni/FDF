@@ -38,7 +38,7 @@ static void		set_par_deltas(t_env *env)
 static void		set_iso_values(t_env *env)
 {
 	env->zcoeff = 1.;
-	env->iso_scale = 50.;
+	env->iso_scale = DEF_ZOOM;
 	env->iso_inter = (t_dims){10, 10};
 	env->iso_angles = (t_fvector){DEF_ANG_X, DEF_ANG_Y};
 	env->iso_d = (t_dims){0, 0};
