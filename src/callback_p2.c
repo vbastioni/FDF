@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 15:30:36 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/17 09:43:07 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 15:50:23 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,6 @@ int						cb_expose(void *param)
 	if (env->rdr != NULL)
 		env->rdr(env);
 	return (0);
-}
-
-void					change_render(t_mode mode, t_env *env)
-{
-	if (env->render_mode == mode)
-		return ;
-	env->render_mode = mode;
-	if (mode == 0)
-		env->rdr = &draw_par;
-	else if (mode == 1)
-		env->rdr = &draw_iso;
-	env->rdr(env);
 }
 
 void					change_color(t_env *env)
@@ -49,10 +37,6 @@ int						cb_key(int kc, void *param)
 	env = (t_env *)param;
 	if (kc == KC_EXIT)
 		close_window(env);
-	if (kc == KC_PAR)
-		change_render(PAR, env);
-	if (kc == KC_ISO)
-		change_render(ISO, env);
 	if (kc == KC_R)
 		reset_view(env);
 	return (0);

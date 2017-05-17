@@ -6,34 +6,13 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/15 14:44:30 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/17 14:08:34 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 16:52:39 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <mlx.h>
 
 #include "fdf.h"
-
-static void		set_par_deltas(t_env *env)
-{
-	t_dims		d;
-	t_dims		max;
-
-	max.x = ((env->pdims.x - 1) != 0) ? env->pdims.x - 1 : 1;
-	max.y = ((env->pdims.y - 1) != 0) ? env->pdims.y - 1 : 1;
-	d.x = (WIN_X - env->pdims.x);
-	d.y = (WIN_Y - env->pdims.y);
-	env->par_inter.x = (d.x / max.x);
-	env->par_inter.y = (d.y / max.y);
-	if (env->par_inter.x > env->par_inter.y)
-		env->par_inter.x = env->par_inter.y;
-	if (env->par_inter.x < env->par_inter.y)
-		env->par_inter.y = env->par_inter.x;
-	env->par_d.x = (WIN_X - (env->par_inter.x * (env->pdims.x - 1)
-						+ env->pdims.x)) / 2;
-	env->par_d.y = (WIN_Y - (env->par_inter.y * (env->pdims.y - 1)
-						+ env->pdims.y)) / 2;
-}
 
 static void		set_iso_values(t_env *env)
 {
@@ -47,8 +26,6 @@ static void		set_iso_values(t_env *env)
 static int		env_setup(t_env *env)
 {
 	env->color_id = 0;
-	env->rdr = NULL;
-	env->render_mode = PAR;
 	env->color_sets[0] = (t_dims){COL_LOW_1, COL_HIGH_1};
 	env->color_sets[1] = (t_dims){COL_LOW_2, COL_HIGH_2};
 	env->color_sets[2] = (t_dims){COL_LOW_3, COL_HIGH_3};
@@ -59,13 +36,12 @@ static int		env_setup(t_env *env)
 		return (0 * close_window(env) * err("Could not init mlx\n"));
 	if (!(env->win = mlx_new_window(env->mlx, WIN_X, WIN_Y, WIN_NAME)))
 		return (0 * close_window(env) * err("Could not create new window\n"));
-	set_par_deltas(env);
 	set_iso_values(env);
-	env->rdr = &draw_par;
+	env->rdr = &draw_iso;
 	return (1);
 }
 
-void			try_get_color(int ac, char **av, t_env *env)
+static void		try_get_color(int ac, char **av, t_env *env)
 {
 	if (ac == 4 && ft_strlen(av[2]) > 2 && ft_strncmp("0x", av[2], 2) == 0
 		&& ft_strlen(av[3]) > 2 && ft_strncmp("0x", av[3], 2) == 0)
@@ -76,11 +52,25 @@ void			try_get_color(int ac, char **av, t_env *env)
 	}
 }
 
+static int		good_args(int ac, char **av)
+{
+	int			i;
+
+	i = (ac == 2 || (ac == 4 && ft_strncmp(av[2], "0x", 2) == 0
+						&& ft_strncmp(av[3], "0x", 2) == 0));
+	if (i)
+		return (1);
+	ft_putstr("Usage: ");
+	ft_putstr(av[0]);
+	ft_putstr(" <filename> [<color hex #1> <color hex #2>]\n");
+	return (0);
+}
+
 int				main(int ac, char **av)
 {
 	t_env	env;
 
-	if (ac < 2)
+	if (!good_args(ac, av))
 		return (1);
 	if (!preparse_data(av[1], &env))
 		return (1);

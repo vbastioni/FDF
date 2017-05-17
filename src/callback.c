@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/15 13:28:07 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/17 12:10:12 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 15:50:22 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 static void				change_rotation(t_env *env, int keycode)
 {
-	if (env->render_mode != ISO)
-		return ;
 	if (keycode == KC_LEFT)
 		env->iso_angles.a += 5.0;
 	else if (keycode == KC_RIGHT)
@@ -37,16 +35,12 @@ static void				change_rotation(t_env *env, int keycode)
 
 static void				change_height(int dir, t_env *env)
 {
-	if (env->render_mode != ISO)
-		return ;
 	env->zcoeff -= dir;
 	env->rdr(env);
 }
 
 static int				change_scale(int val, t_env *env)
 {
-	if (env->render_mode != ISO)
-		return (1);
 	env->iso_scale += val;
 	if (env->iso_scale < 1)
 		env->iso_scale = 1;

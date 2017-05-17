@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/15 13:56:06 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/17 11:09:37 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 16:50:15 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,17 @@ t_fvector				get_iso_pos(t_vector *pos, const t_env *env)
 {
 	t_fvector			ret;
 	t_fvector			ang;
+	double				div;
 
+	div = (env->alts.y - env->alts.x);
+	if (div == 0)
+		div = 1;
 	ang.a = env->iso_angles.a;
 	ang.b = env->iso_angles.b;
 	ret.a = cos(ang.a * TO_RAD) * pos->x - sin(ang.a * TO_RAD) * pos->y;
 	ret.b = sin(ang.a * TO_RAD) * cos(ang.b * TO_RAD) * pos->x
 					+ cos(ang.a * TO_RAD) * cos(ang.b * TO_RAD) * pos->y
-					- sin(ang.b * TO_RAD) * ((double)pos->z
-												/ (env->alts.y - env->alts.x)
+					- sin(ang.b * TO_RAD) * ((double)pos->z / div
 												* env->zcoeff);
 	ret.a *= env->iso_scale;
 	ret.b *= env->iso_scale;

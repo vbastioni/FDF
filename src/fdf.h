@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/11 12:51:29 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/17 13:34:17 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 16:50:58 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,16 +95,6 @@
 # define NO_EVENT_MASK 0L
 
 /*
-**	APP EVENT
-*/
-
-# define EVT_CLOSE_WIN 11
-
-/*
-** # define DestroyNotify	17
-*/
-
-/*
 **	typedefs
 */
 
@@ -172,9 +162,6 @@ struct					s_dims
 	int					y;
 };
 
-t_dims					dims_zero();
-t_dims					dims_create(int x, int y);
-
 /*
 **	GENERIC CONTAINERS
 */
@@ -240,9 +227,6 @@ struct					s_env
 	t_vertex			**vertex;
 	t_dims				pdims;
 	t_dims				alts;
-	t_mode				render_mode;
-	t_dims				par_d;
-	t_dims				par_inter;
 	float				zcoeff;
 	t_dims				iso_d;
 	t_dims				iso_offset;

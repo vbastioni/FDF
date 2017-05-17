@@ -6,7 +6,7 @@
 #    By: vbastion <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/05/17 13:48:19 by vbastion          #+#    #+#              #
-#    Updated: 2017/05/17 14:18:13 by vbastion         ###   ########.fr        #
+#    Updated: 2017/05/17 16:15:34 by vbastion         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,6 @@ ITEM:=\
 	color.o\
 	draw_iso.o\
 	draw_iso_p2.o\
-	draw_par.o\
 	error.o\
 	img.o\
 	main.o\
@@ -39,7 +38,7 @@ $(NAME): $(OBJ)
 all: $(NAME)
 
 %.o: %.c
-	$(CC) -c $< $(CFLAGS) -o $@ -I $(FT)
+	$(CC) $(CFLAGS) -c $< -o $@ -I $(FT)
 
 clean:
 	/bin/rm -f $(OBJ)
