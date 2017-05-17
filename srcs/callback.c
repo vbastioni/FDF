@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/15 13:28:07 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/15 13:29:23 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 12:10:12 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ static int				change_scale(int val, t_env *env)
 	if (env->render_mode != ISO)
 		return (1);
 	env->iso_scale += val;
+	if (env->iso_scale < 1)
+		env->iso_scale = 1;
 	env->rdr(env);
 	return (0);
 }

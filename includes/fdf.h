@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/11 12:51:29 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/17 11:16:29 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 12:13:31 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 
 # include <stdlib.h>
 # include <math.h>
-
-# include <stdio.h>
 
 # include "libft.h"
 

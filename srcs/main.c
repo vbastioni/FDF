@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/15 14:44:30 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/17 11:19:17 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 12:12:22 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int		env_setup(t_env *env)
 	if (!(env->mlx = mlx_init()))
 		return (0 * close_window(env) * err("Could not init mlx\n"));
 	if (!(env->win = mlx_new_window(env->mlx, WIN_X, WIN_Y, WIN_NAME)))
-		return (0 * close_window(env)* err("Could not create new window\n");
+		return (0 * close_window(env) * err("Could not create new window\n"));
 	set_par_deltas(env);
 	set_iso_values(env);
 	env->rdr = &draw_par;
