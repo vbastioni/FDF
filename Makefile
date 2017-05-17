@@ -1,66 +1,52 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: vbastion <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2017/05/17 13:48:19 by vbastion          #+#    #+#              #
+#    Updated: 2017/05/17 14:18:13 by vbastion         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME=fdf
 LIB=fdf.a
 CC=gcc
 CFLAGS=-Wall -Wextra -Werror
-GNL=./gnl
 FT=./libft
 LIBS=-lmlx -framework OpenGL -framework AppKit
-INCS=-I ${INC_D} -I ${GNL} -I ${FT}
-MLX=minilibx_macos
-ifeq ("$t", "true")
-LIBS +=-L $(MLX)
-INCS +=-I $(MLX)
-endif
+INCS=-I ${INC_D} -I ${FT}
 SRC_D=./srcs/
 INC_D=./includes/
 ITEM:=\
-	callback.c\
-	callback_p2.c\
-	color.c\
-	draw_iso.c\
-	draw_iso_p2.c\
-	draw_par.c\
-	error.c\
-	img.c\
-	main.c\
-	parsing.c
-SRC:=$(addprefix $(SRC_D), $(ITEM))
-OBJ:=$(ITEM:.c=.o)
+	callback.o\
+	callback_p2.o\
+	color.o\
+	draw_iso.o\
+	draw_iso_p2.o\
+	draw_par.o\
+	error.o\
+	img.o\
+	main.o\
+	parsing.o
+OBJ:= $(addprefix ./src/, $(ITEM))
 
-$(NAME): $(SRC)
-	@make -C $(FT)
-	@make -C $(GNL)
-ifeq ("$t", "true")
-	@tar -xf ./minilibx_macos_20151105.tgz
-	@make -C $(MLX)
-endif
-	$(CC) $(CFLAGS) -c $? $(SRC) ${INCS}
-	$(CC) $(OBJ) ${GNL}/get_next_line.o -o $(NAME) -L ${FT}/ -lft  $(LIBS)
-
-debug: $(SRC)
-	@make -C $(FT)
-	@make -C $(GNL)
-	$(CC) -D DEBUG $(CFLAGS) -c $? $(SRC) $(INCS)
-	$(CC) $(OBJ) ${GNL}/get_next_line.o -o $(NAME) -L ${FT}/ -lft $(LIBS)
+$(NAME): $(OBJ)
+	make -C $(FT)
+	$(CC) $? -o $(NAME) -L ${FT}/ -lft  $(LIBS)
 
 all: $(NAME)
 
+%.o: %.c
+	$(CC) -c $< $(CFLAGS) -o $@ -I $(FT)
+
 clean:
-	rm -f $(OBJ)
-	make -C $(GNL) clean
+	/bin/rm -f $(OBJ)
 	make -C $(FT) clean
 
 fclean: clean
-	rm -f $(NAME)
-	make -C $(GNL) fclean
+	/bin/rm -f $(NAME)
 	make -C $(FT) fclean
 
 re: fclean all
-
-mrproper: fclean
-	@printf "\e[31mCleaning Minilibx.\e[30;0m\n"
-	@rm -rf $(MLX)
-	@printf "\e[31mCleaning GNL.\e[30;0m\n"
-	@make -C ${GNL} fclean
-	@printf "\e[31mCleaning Libft.\e[30;0m\n"
-	@make -C ${FT} fclean

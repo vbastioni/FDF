@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/11 14:01:03 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/15 14:56:37 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 14:04:35 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 
 # define MAX_LONG 9223372036854775807
 # define MIN_LONG (MAX_LONG + 1)
+
+# define BUFF_SIZE 1024
 
 typedef struct		s_list
 {
@@ -105,5 +107,6 @@ int					ft_isspace(char c);
 unsigned int		ft_atoibase(const char *nbr, const char *base);
 unsigned int		ft_atoinbase(const char *nbr);
 unsigned int		ft_atoihex(const char *nbr);
+int					get_next_line(const int fd, char **line);
 
 #endif

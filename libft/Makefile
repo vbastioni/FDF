@@ -6,12 +6,12 @@
 #    By: vbastion <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/12 19:31:49 by vbastion          #+#    #+#              #
-#    Updated: 2017/04/21 14:21:48 by vbastion         ###   ########.fr        #
+#    Updated: 2017/05/17 14:18:44 by vbastion         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME=libft.a
-CC=GCC
+CC=gcc
 CFLAGS=-Wall -Wextra -Werror
 
 SRC=ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c ft_memmove.c ft_memchr.c \
@@ -27,23 +27,22 @@ SRC=ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c ft_memmove.c ft_memchr.c \
 	ft_lstadd.c ft_lstiter.c ft_lstmap.c ft_pow.c ft_torad.c ft_todeg.c\
 	ft_lstmerge.c ft_lstsize.c ft_lstat.c ft_lstfind.c ft_valid_base.c\
 	ft_usage.c ft_abs.c ft_itoabase.c ft_atol.c ft_countbits.c  ft_activebits.c\
-	ft_isspace.c ft_atoibase.c ft_atoinbase.c ft_atoihex.c
+	ft_isspace.c ft_atoibase.c ft_atoinbase.c ft_atoihex.c get_next_line.c
 OBJ=$(SRC:.c=.o)
 
-$(NAME): $(SRC)
-	@echo "Compiling $(NAME)"
-	$(CC) $(CFLAGS) -c $? $(SRC)
+$(NAME): $(OBJ)
 	ar rc $(NAME) $(OBJ)
 	ranlib $(NAME)
+
+%.o: %.c
+	$(CC) -c $< $(CFLAGS) -o $@
 
 all: $(NAME)
 
 clean:
-	@echo "Cleaning objects of $(NAME)"
-	@/bin/rm -f $(OBJ)
+	/bin/rm -f $(OBJ)
 
 fclean: clean
-	@echo "Cleaning $(NAME)."
-	@/bin/rm -f $(NAME)
+	/bin/rm -f $(NAME)
 
 re: fclean $(NAME)
