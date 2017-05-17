@@ -1,9 +1,0 @@
-CHECK ../maps/plat.fdf ../maps/pnp_flat.fdf. -- DONE
-Find window exit callback. And do clean-up on this instead of esc key - DONE
-Add error checking in input files and add verbose errors. -- DONE
-Add offset on either x or y to center representation on screen. -- DONE
-Add Height coloring. -- DONE
-Renormalize height -- DONE
-Add default delta and scale to a certain value - DONE
-Clean up on quit or on error. -- DONE
-Add change altitude event -- DONE

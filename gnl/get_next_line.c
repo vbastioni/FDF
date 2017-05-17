@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 14:55:37 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/15 15:06:27 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 12:57:31 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 static t_list		*fds_fd(const int fd, t_list **fds)
 {
 	t_list			*head;
+	t_list			*new;
 
 	if (!(fds))
 		return (NULL);
@@ -28,7 +29,11 @@ static t_list		*fds_fd(const int fd, t_list **fds)
 			return (head);
 		head = head->next;
 	}
-	ft_lstadd(fds, ft_lstnew("\0", fd));
+	if (!(new = ft_lstnew(NULL, 0)))
+		return (NULL);
+	new->content = ft_strnew(0);
+	new->content_size = fd;
+	ft_lstadd(fds, new);
 	return (*fds);
 }
 
@@ -82,7 +87,8 @@ int					get_next_line(const int fd, char **line)
 	if (fd < 0 || !line)
 		return (-1);
 	tmp[0] = 0;
-	t = fds_fd(fd, &fds);
+	if (!(t = fds_fd(fd, &fds)))
+		return (-1);
 	if (ft_strlen(t->content) && (tmp[0] = ft_strstr(t->content, "\n")))
 		return (handle_rem(tmp[0], t, line));
 	while ((b_sz = read(fd, buf, BUFF_SIZE)) > 0 &&
