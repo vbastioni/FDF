@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/15 14:44:30 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/16 17:16:33 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 11:19:17 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void		set_iso_values(t_env *env)
 	env->iso_d = (t_dims){0, 0};
 }
 
-void			env_setup(t_env *env)
+static int		env_setup(t_env *env)
 {
 	env->color_id = 0;
 	env->rdr = NULL;
@@ -55,11 +55,14 @@ void			env_setup(t_env *env)
 	env->color_sets[3] = (t_dims){COL_LOW_4, COL_HIGH_4};
 	env->color_set_cnt = 4;
 	env->iso_offset = (t_dims){0, 0};
-	env->mlx = mlx_init();
-	env->win = mlx_new_window(env->mlx, WIN_X, WIN_Y, WIN_NAME);
+	if (!(env->mlx = mlx_init()))
+		return (0 * close_window(env) * err("Could not init mlx\n"));
+	if (!(env->win = mlx_new_window(env->mlx, WIN_X, WIN_Y, WIN_NAME)))
+		return (0 * close_window(env)* err("Could not create new window\n");
 	set_par_deltas(env);
 	set_iso_values(env);
 	env->rdr = &draw_par;
+	return (1);
 }
 
 void			try_get_color(int ac, char **av, t_env *env)
@@ -89,6 +92,7 @@ int				main(int ac, char **av)
 	mlx_expose_hook(env.win, &cb_expose, &env);
 	mlx_key_hook(env.win, &cb_key, &env);
 	mlx_hook(env.win, KEY_PRESS, KEY_PRESS_MASK, &cb_cont_key, &env);
+	mlx_hook(env.win, DESTROY_NOTIFY, NO_EVENT_MASK, &on_win_close, &env);
 	mlx_loop(env.mlx);
-	return (free_lines(&env, env.pdims.y));
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/11 12:14:46 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/15 17:14:41 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 11:16:30 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,14 @@ static inline int	render_to(const t_env *e, const t_img *img, t_dir dir,
 	return (0);
 }
 
-void				draw_par(const t_env *e)
+int					draw_par(const t_env *e)
 {
 	t_dims			pos;
 	t_img			img;
 	char			*addr;
 
-	img.img = mlx_new_image(e->mlx, WIN_X, WIN_Y);
-	img.addr = mlx_get_data_addr(img.img, &img.bpx, &img.sl, &img.endian);
-	img.bpx /= 8;
+	if (!(img_set(&img, e)))
+		return (0);
 	pos.y = -1;
 	while (++pos.y < (e->pdims.y))
 	{
@@ -67,4 +66,5 @@ void				draw_par(const t_env *e)
 	}
 	mlx_put_image_to_window(e->mlx, e->win, img.img, 0, 0);
 	mlx_destroy_image(e->mlx, img.img);
+	return (0);
 }

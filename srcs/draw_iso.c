@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/15 13:56:06 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/15 14:49:55 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 11:09:37 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static void				render_to(const t_env *env, const t_img *img,
 	draw_from_to(env, img, v, ve);
 }
 
-void					draw_iso(const t_env *env)
+int						draw_iso(const t_env *env)
 {
 	t_dims				pos;
 	t_img				img;
@@ -93,9 +93,8 @@ void					draw_iso(const t_env *env)
 
 	set_env_iso_delta((t_env *)env);
 	max_l = (t_dims){env->pdims.x - 1, env->pdims.y - 1};
-	img.img = mlx_new_image(env->mlx, WIN_X, WIN_Y);
-	img.addr = mlx_get_data_addr(img.img, &img.bpx, &img.sl, &img.endian);
-	img.bpx /= 8;
+	if (!(img_set(&img, env)))
+		return (0 * err("Could not create window\n"));
 	pos.y = -1;
 	while (++pos.y < env->pdims.y)
 	{
@@ -112,4 +111,5 @@ void					draw_iso(const t_env *env)
 	}
 	mlx_put_image_to_window(env->mlx, env->win, img.img, 0, 0);
 	mlx_destroy_image(env->mlx, img.img);
+	return (1);
 }

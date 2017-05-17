@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 15:30:36 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/16 15:30:41 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 09:43:07 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int						cb_key(int kc, void *param)
 
 	env = (t_env *)param;
 	if (kc == KC_EXIT)
-		exit(0);
+		close_window(env);
 	if (kc == KC_PAR)
 		change_render(PAR, env);
 	if (kc == KC_ISO)

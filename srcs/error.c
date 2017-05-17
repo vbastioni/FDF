@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/15 13:59:49 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/15 14:44:06 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 10:56:51 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,26 @@ int			free_lines(t_env *env, int cnt)
 	int		i;
 
 	i = 0;
-	while (i <= cnt)
+	while (i < cnt)
 	{
 		free(env->vertex[i]);
 		i++;
 	}
 	free(env->vertex);
-	return (0);
+	return (1);
+}
+
+int			close_window(t_env *env)
+{
+	mlx_destroy_window(env->mlx, env->win);
+	env->win = NULL;
+	on_win_close(env);
+	return (1);
+}
+
+int			on_win_close(t_env *env)
+{
+	free_lines(env, env->pdims.y);
+	exit(1);
+	return (1);
 }

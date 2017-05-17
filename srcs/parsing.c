@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/15 13:19:22 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/15 16:46:55 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 10:48:11 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,29 +44,29 @@ static int			count_elem(const char *str)
 	return (cnt);
 }
 
-static t_vertex		get_vertex(char **line, int x, int y)
+static int			set_vertex(char **line, int x, int y, t_vertex *vec)
 {
-	t_vertex		vec;
-
-	vec.pos.x = x;
-	vec.pos.y = y;
-	vec.pos.z = ft_atoi(*line);
 	while (ft_isspace(**line))
 		(*line)++;
 	if (*(*line) == '-' || *(*line) == '+')
 		(*line)++;
+	if (!ft_isdigit(**line))
+		return (0 * err("Not a digit after spaces and eventual sign\n"));
+	vec->pos = (t_vector){x, y, ft_atoi(*line)};
 	while (ft_isdigit(**line))
 		(*line)++;
+	if (**line != ',' && **line != ' ' && **line != '\0')
+		return (0 * err("Bad character after number\n"));
 	if (ft_strncmp(*line, ",0x", 3) == 0)
 	{
 		(*line) += 3;
-		vec.color.color = ft_atoihex(*line);
+		vec->color.color = ft_atoihex(*line);
 		while (ft_isalnum(**line))
 			(*line)++;
 	}
 	else
-		vec.color.color = -1;
-	return (vec);
+		vec->color.color = -1;
+	return (1);
 }
 
 static int			convert_data(t_env *e, char *line, int y)
@@ -76,13 +76,14 @@ static int			convert_data(t_env *e, char *line, int y)
 
 	cnt = count_elem(line);
 	if (cnt != e->pdims.x)
-		return (0 * (err("Error line #") | err(ft_itoa(y)) | err("\n")));
+		return (-(err("Error line #") | err(ft_itoa(y)) | err("\n")));
 	if (!(e->vertex[y] = (t_vertex *)malloc(sizeof(t_vertex) * e->pdims.x)))
-		return (0 * err("Could not allocate memory\n"));
+		return (-err("Could not allocate memory\n"));
 	x = -1;
 	while (++x < e->pdims.x)
 	{
-		e->vertex[y][x] = get_vertex(&line, x, y);
+		if (set_vertex(&line, x, y, e->vertex[y] + x) == 0)
+			return (0 * err("Bad line format\n"));
 		if (e->vertex[y][x].pos.z > e->alts.y)
 			e->alts.y = e->vertex[y][x].pos.z;
 		else if (e->vertex[y][x].pos.z < e->alts.x)
@@ -130,8 +131,8 @@ int					parse_data(char *filename, t_env *env)
 	while ((gnl = get_next_line(fd, &line)) > 0
 			&& ((ret_cd = convert_data(env, line, y++)) > 0))
 		free(line);
-	if (ret_cd == 0)
-		return (free_lines(env, y - 2));
+	if (ret_cd < 1)
+		return (0 * free_lines(env, ret_cd == 0 ? y : y - 1));
 	close(fd);
 	return (1);
 }

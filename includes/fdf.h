@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/11 12:51:29 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/15 16:48:26 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 11:16:29 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@
 # define COL_HIGH_3 (0x9B4815)
 # define COL_HIGH_4 (0xC627A1)
 
-# define COLOR_SET_CNT (4)
-
 /*
 **	KEYCODES
 */
@@ -94,6 +92,9 @@
 # define KEY_RELEASE 3
 # define KEY_PRESS_MASK 1L << 0
 # define KEY_RELEASE_MASK 1L << 1
+
+# define DESTROY_NOTIFY 17
+# define NO_EVENT_MASK 0L
 
 /*
 **	APP EVENT
@@ -158,8 +159,8 @@ enum					e_dir
 	DIA = 2
 };
 
-void					draw_par(const t_env *env);
-void					draw_iso(const t_env *env);
+int						draw_par(const t_env *env);
+int						draw_iso(const t_env *env);
 t_fvector				get_iso_pos(t_vector *pos, const t_env *env);
 void					set_env_iso_delta(t_env *e);
 
@@ -214,6 +215,7 @@ struct					s_vertex
 	t_vector			pos;
 	t_color				color;
 };
+
 /*
 **	Image container
 */
@@ -227,7 +229,7 @@ struct					s_img
 	int					endian;
 };
 
-t_img					*img_create(const t_env *env, t_mode mode);
+int						img_set(t_img *img, const t_env *env);
 
 /*
 **	APP VARIABLES
@@ -253,7 +255,7 @@ struct					s_env
 	int					color_set_id;
 	int					color_set_cnt;
 	int					color_id;
-	void				(*rdr)(const t_env *env);
+	int					(*rdr)(const t_env *env);
 };
 
 /*
@@ -276,5 +278,7 @@ int						cb_cont_key(int kc, void *param);
 
 int						err(const char *msg);
 int						free_lines(t_env *env, int cnt);
+int						on_win_close(t_env *e);
+int						close_window(t_env *e);
 
 #endif
