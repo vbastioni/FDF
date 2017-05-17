@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/15 14:44:30 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/17 16:52:39 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 17:38:40 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int		env_setup(t_env *env)
 	env->color_sets[1] = (t_dims){COL_LOW_2, COL_HIGH_2};
 	env->color_sets[2] = (t_dims){COL_LOW_3, COL_HIGH_3};
 	env->color_sets[3] = (t_dims){COL_LOW_4, COL_HIGH_4};
-	env->color_set_cnt = 4;
+	env->color_cnt = 4;
 	env->iso_offset = (t_dims){0, 0};
 	if (!(env->mlx = mlx_init()))
 		return (0 * close_window(env) * err("Could not init mlx\n"));
@@ -48,7 +48,7 @@ static void		try_get_color(int ac, char **av, t_env *env)
 	{
 		env->color_sets[4].x = ft_atoihex(av[2] + 2);
 		env->color_sets[4].y = ft_atoihex(av[3] + 2);
-		env->color_set_cnt = 5;
+		env->color_cnt = 5;
 	}
 }
 

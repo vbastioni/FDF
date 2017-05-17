@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 15:30:36 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/17 15:50:23 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 17:36:50 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int						cb_expose(void *param)
 void					change_color(t_env *env)
 {
 	env->color_id++;
-	if (env->color_id == env->color_set_cnt)
+	if (env->color_id == env->color_cnt)
 		env->color_id = 0;
 	env->rdr(env);
 }

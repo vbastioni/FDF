@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/11 12:51:29 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/17 16:50:58 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 17:38:41 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,8 +234,7 @@ struct					s_env
 	t_fvector			iso_angles;
 	float				iso_scale;
 	t_dims				color_sets[5];
-	int					color_set_id;
-	int					color_set_cnt;
+	int					color_cnt;
 	int					color_id;
 	int					(*rdr)(const t_env *env);
 };

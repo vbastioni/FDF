@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/15 13:29:44 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/17 16:49:33 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/17 17:35:16 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ int			col_get(t_vertex v, const t_env *env)
 		return (v.color.color);
 	if (env->alts.x == env->alts.y)
 	{
-		return (0xFFFFFF);
+		return (env->color_sets[env->color_id].x != 0
+				? env->color_sets[env->color_id].x
+				: env->color_sets[env->color_id].y);
 	}
 	pct = (float)(v.pos.z - env->alts.x) / (float)(env->alts.y - env->alts.x);
 	return (color_lerp(env->color_sets[env->color_id].x,
