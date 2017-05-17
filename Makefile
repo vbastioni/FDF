@@ -13,7 +13,6 @@ INCS +=-I $(MLX)
 endif
 SRC_D=./srcs/
 INC_D=./includes/
-# ITEM:=$(shell ls ${SRC_D}*.c | sed -E 's/.*\/([0-9A-Za-z_]*\.c)/\1/g')
 ITEM:=\
 	callback.c\
 	callback_p2.c\
@@ -22,6 +21,7 @@ ITEM:=\
 	draw_iso_p2.c\
 	draw_par.c\
 	error.c\
+	img.c\
 	main.c\
 	parsing.c
 SRC:=$(addprefix $(SRC_D), $(ITEM))
@@ -47,9 +47,13 @@ all: $(NAME)
 
 clean:
 	rm -f $(OBJ)
+	make -C $(GNL) clean
+	make -C $(FT) clean
 
 fclean: clean
 	rm -f $(NAME)
+	make -C $(GNL) fclean
+	make -C $(FT) fclean
 
 re: fclean all
 
