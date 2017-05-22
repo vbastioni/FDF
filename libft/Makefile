@@ -6,7 +6,7 @@
 #    By: vbastion <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/12 19:31:49 by vbastion          #+#    #+#              #
-#    Updated: 2017/05/22 10:52:52 by vbastion         ###   ########.fr        #
+#    Updated: 2017/05/22 11:59:42 by vbastion         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,13 +30,14 @@ SRC=ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c ft_memmove.c ft_memchr.c \
 	ft_isspace.c ft_atoibase.c ft_atoinbase.c ft_atoihex.c get_next_line.c
 OBJ=$(SRC:.c=.o)
 
-$(NAME): 
-	@echo "\033[33mBuiling objects of libft.\033[0m"
-	@gcc -c $(SRC) $(CFLAGS)
+$(NAME): $(OBJ)
 	@echo "\033[33mBuilding libft.\033[0m"
-	@ar rc $(NAME) $(OBJ)
-	@ranlib $(NAME)
+	ar rc $(NAME) $(OBJ)
+	ranlib $(NAME)
 	@echo "\033[32mDone building libft\033[0m"
+
+%.o: %.c
+	$(CC) -c $< $(CFLAGS) -o $@
 
 
 all: $(NAME)

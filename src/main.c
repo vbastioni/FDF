@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/15 14:44:30 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/17 17:38:40 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/22 11:23:39 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static void		set_iso_values(t_env *env)
 	env->iso_inter = (t_dims){10, 10};
 	env->iso_angles = (t_fvector){DEF_ANG_X, DEF_ANG_Y};
 	env->iso_d = (t_dims){0, 0};
+	env->zcoeff = 0.;
 }
 
 static int		env_setup(t_env *env)
