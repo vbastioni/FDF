@@ -6,7 +6,7 @@
 /*   By: vbastion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/15 13:56:06 by vbastion          #+#    #+#             */
-/*   Updated: 2017/05/17 16:50:15 by vbastion         ###   ########.fr       */
+/*   Updated: 2017/05/22 11:02:36 by vbastion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,6 @@ int						draw_iso(const t_env *env)
 				render_to(env, &img, RIG, pos);
 			if (pos.y < max_l.y)
 				render_to(env, &img, BOT, pos);
-			if (pos.x < max_l.x && pos.y < max_l.y)
-				render_to(env, &img, DIA, pos);
 		}
 	}
 	mlx_put_image_to_window(env->mlx, env->win, img.img, 0, 0);
