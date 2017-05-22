@@ -6,7 +6,7 @@
 #    By: vbastion <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/05/17 13:48:19 by vbastion          #+#    #+#              #
-#    Updated: 2017/05/17 16:15:34 by vbastion         ###   ########.fr        #
+#    Updated: 2017/05/22 10:30:04 by vbastion         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,17 +31,16 @@ ITEM:=\
 	parsing.o
 OBJ:= $(addprefix ./src/, $(ITEM))
 
-$(NAME): $(OBJ)
+$(NAME):
 	make -C $(FT)
-	$(CC) $? -o $(NAME) -L ${FT}/ -lft  $(LIBS)
+	gcc -c $(OBJ:.o=.c) $(CFLAGS) -I ${FT}
+	$(CC) $(ITEM) -o $(NAME) -L ${FT}/ -lft  $(LIBS)
 
 all: $(NAME)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -I $(FT)
-
 clean:
 	/bin/rm -f $(OBJ)
+	/bin/rm -f $(ITEM)
 	make -C $(FT) clean
 
 fclean: clean
