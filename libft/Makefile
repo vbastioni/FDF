@@ -6,7 +6,7 @@
 #    By: vbastion <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/12 19:31:49 by vbastion          #+#    #+#              #
-#    Updated: 2017/05/22 10:28:48 by vbastion         ###   ########.fr        #
+#    Updated: 2017/05/22 10:52:52 by vbastion         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,17 +31,22 @@ SRC=ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c ft_memmove.c ft_memchr.c \
 OBJ=$(SRC:.c=.o)
 
 $(NAME): 
-	gcc -c $(SRC) $(CFLAGS)
-	ar rc $(NAME) $(OBJ)
-	ranlib $(NAME)
+	@echo "\033[33mBuiling objects of libft.\033[0m"
+	@gcc -c $(SRC) $(CFLAGS)
+	@echo "\033[33mBuilding libft.\033[0m"
+	@ar rc $(NAME) $(OBJ)
+	@ranlib $(NAME)
+	@echo "\033[32mDone building libft\033[0m"
 
 
 all: $(NAME)
 
 clean:
-	/bin/rm -f $(OBJ)
+	@echo "\033[31mCleaning libft.\033[0m"
+	@/bin/rm -f $(OBJ)
 
 fclean: clean
-	/bin/rm -f $(NAME)
+	@echo "\033[31mFCleaning libft.\033[0m"
+	@/bin/rm -f $(NAME)
 
 re: fclean $(NAME)
